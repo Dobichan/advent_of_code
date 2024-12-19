@@ -3,3 +3,13 @@ Register B: 0
 Register C: 0
 
 Program: 2,4,1,7,7,5,1,7,0,3,4,1,5,5,3,0
+
+
+2,4 bst a  => b = a & 0x07;
+1,7 bxl 7  => b = b ^ 7;
+7,5 cdv 5  => c = a >> b
+1,7 bxl 7  => b = b ^ 7 = a & 0x07
+0,3 adv 3  => a = a >> 3
+4,1 bxc 1  => b = b ^ c
+5,5 out 5  => print b%8
+3,0 jnz 0  => continue until a == 0
