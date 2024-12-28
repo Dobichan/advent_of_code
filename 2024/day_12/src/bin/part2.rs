@@ -10,9 +10,9 @@ fn main() {
 
 fn parse(input: &str) -> Vec<Vec<char>> {
     let mut ret: Vec<Vec<char>> = Vec::new();
-    for (r, l) in input.lines().enumerate() {
+    for l in input.lines() {
         let mut line: Vec<char> = Vec::new();
-        for (c, ch) in l.chars().enumerate() {
+        for ch in l.chars() {
             line.push(ch);
         }
         ret.push(line);
@@ -35,93 +35,186 @@ fn part2(input: &str) -> i32 {
             if processed.contains_key(&(r, c)) {
                 continue;
             }
-            println!("Checking {r}x{c} {:?}", grid[r][c]);
+            // println!("Checking {r}x{c} {:?}", grid[r][c]);
+
+            let mut nodes = vec![vec![0; cols + 1]; rows + 1];
 
             let mut area = 0;
-            let mut direction_change = 0;
 
             let mut to_check: VecDeque<(usize, usize)> = VecDeque::new();
             to_check.push_back((r, c));
 
             while to_check.len() > 0 {
                 let (r1, c1) = to_check.pop_front().unwrap();
-                println!("checking {r1},{c1}");
+
                 if processed.contains_key(&(r1, c1)) {
                     continue;
                 }
-                area += 1;
-                processed.insert((r1, c1), grid[r1][c1]);
 
-                // Check right&up
-                if r1 > 0 && c1 < cols - 1 {
-                    println!("Check right&up ({area}-{direction_change})");
-                    if (grid[r1][c1 + 1] == grid[r1][c1]) && (grid[r1 - 1][c1 + 1] == grid[r1][c1])
-                    {
-                        to_check.push_back((r1 - 1, c1 + 1));
-                        direction_change += 1;
+                area += 1;
+
+                processed.insert((r1, c1), grid[r1][c1]);
+                let current_type = grid[r1][c1];
+
+                //  nodes: (r1,c1) (r1,c1+1)
+                //                A
+                //       (r1+1,c1) (r+1,c1+1)
+
+                // x1 |  x2  |  x3
+                // x4 | -> A |  x5
+                // x6 |  x7  |  x8
+
+                // Make sure outside area is not this char
+                let mut x1 = if current_type == 'A' { 'B' } else { 'A' };
+                let mut x2 = x1;
+                let mut x3 = x1;
+                let mut x4 = x1;
+                let mut x5 = x1;
+                let mut x6 = x1;
+                let mut x7 = x1;
+                let mut x8 = x1;
+
+                if r1 > 0 {
+                    if c1 > 0 {
+                        x1 = grid[r1 - 1][c1 - 1];
+                    }
+
+                    x2 = grid[r1 - 1][c1];
+
+                    if c1 < cols - 1 {
+                        x3 = grid[r1 - 1][c1 + 1];
                     }
                 }
+                if c1 > 0 {
+                    x4 = grid[r1][c1 - 1];
+                }
+                if c1 < cols - 1 {
+                    x5 = grid[r1][c1 + 1];
+                }
+
+                if r1 < rows - 1 {
+                    if c1 > 0 {
+                        x6 = grid[r1 + 1][c1 - 1];
+                    }
+
+                    x7 = grid[r1 + 1][c1];
+
+                    if c1 < cols - 1 {
+                        x8 = grid[r1 + 1][c1 + 1];
+                    }
+                }
+
+                // println!();
+                // println!("checking {r1},{c1}");
+                // println!("{x1} {x2} {x3}");
+                // println!("{x4} {current_type} {x5}");
+                // println!("{x6} {x7} {x8}");
+
+                // Check top left corner
+                // -------------------------------------
+                //      x1=A  | x2!=A
+                //      x4!=A | A
+                if x1 == current_type
+                    && x2 != current_type
+                    && x4 != current_type
+                    && nodes[r1][c1] == 1
+                {
+                    // Set special code if we have visited this node before
+                    nodes[r1][c1] = 7;
+                } else {
+                    nodes[r1][c1] += 1;
+                }
+
+                // Check top right corner
+                // -------------------------------------
+                //      x2!=A | x3=A
+                //      A     | x5!=A
+                if x2 != current_type
+                    && x3 == current_type
+                    && x5 != current_type
+                    && nodes[r1][c1 + 1] == 1
+                {
+                    // Set special code if we have visited this node before
+                    nodes[r1][c1 + 1] = 7;
+                } else {
+                    nodes[r1][c1 + 1] += 1;
+                }
+
+                // Check bottom right corner
+                // -------------------------------------
+                //     A     | x5!=A
+                //     x7!=A | x8=A
+                if x5 != current_type
+                    && x7 != current_type
+                    && x8 == current_type
+                    && nodes[r1 + 1][c1 + 1] == 1
+                {
+                    // Set special code if we have visited this node before
+                    nodes[r1 + 1][c1 + 1] = 7;
+                } else {
+                    nodes[r1 + 1][c1 + 1] += 1;
+                }
+
+                // Check bottom left corner
+                // -------------------------------------
+                //     x4!= | A
+                //     x6=A | x7!=A
+                if x4 != current_type
+                    && x6 == current_type
+                    && x7 != current_type
+                    && nodes[r1 + 1][c1] == 1
+                {
+                    // Set special code if we have visited this node before
+                    nodes[r1 + 1][c1] = 7;
+                } else {
+                    nodes[r1 + 1][c1] += 1;
+                }
+
+                // Check up
+                if r1 > 0 {
+                    if grid[r1 - 1][c1] == grid[r1][c1] {
+                        to_check.push_back((r1 - 1, c1));
+                    }
+                }
+
                 // Check right
                 if c1 < cols - 1 {
-                    println!("Check right ({area}-{direction_change})");
                     if grid[r1][c1 + 1] == grid[r1][c1] {
                         to_check.push_back((r1, c1 + 1));
                     }
                 }
 
-                // Check right&down
-                if r1 < rows - 1 && c1 < cols - 1 {
-                    println!("Check right&down ({area}-{direction_change})");
-                    if grid[r1][c1 + 1] == grid[r1][c1] && grid[r1 + 1][c1 + 1] == grid[r1][c1] {
-                        to_check.push_back((r1 + 1, c1 + 1));
-                        direction_change += 1;
-                    }
-                }
-
                 // Check down
                 if r1 < rows - 1 {
-                    println!("Check down ({area}-{direction_change})");
                     if grid[r1 + 1][c1] == grid[r1][c1] {
                         to_check.push_back((r1 + 1, c1));
-                    }
-                }
-
-                // Check down&left
-                if r1 > rows - 1 && c1 > 0 {
-                    println!("Check down&left ({area}-{direction_change})");
-
-                    if grid[r1 + 1][c1] == grid[r1][c1] && grid[r1 + 1][c1 - 1] == grid[r1][c1] {
-                        to_check.push_back((r1 + 1, c1 + 1));
-                        direction_change += 1;
                     }
                 }
 
                 // Check left
                 if c1 > 0 {
                     if grid[r1][c1 - 1] == grid[r1][c1] {
-                        println!("Check left ({area}-{direction_change})");
                         to_check.push_back((r1, c1 - 1));
                     }
                 }
+            }
 
-                // Check left&up
-                if c1 > 0 && r1 > 0 {
-                    println!("Check left&up ({area}-{direction_change})");
-
-                    if grid[r1][c1 - 1] == grid[r1][c1] && grid[r1 - 1][c1 - 1] == grid[r1][c1] {
-                        to_check.push_back((r1 - 1, c1 - 1));
+            let mut direction_change = 0;
+            for y in 0..rows + 1 {
+                for x in 0..cols + 1 {
+                    if nodes[y][x] == 1 || nodes[y][x] == 3 {
                         direction_change += 1;
                     }
+                    if nodes[y][x] == 7 {
+                        direction_change += 2;
+                    }
                 }
-
-                // println!("to check: {:?}", to_check);
             }
-            println!(
-                "Process area {:?} - {area} with {direction_change}",
-                grid[r][c]
-            );
+            // println!(
+            //     "Process area {:?} - {area} with {direction_change} edges",
+            //     grid[r][c]
+            // );
             total_price += area * direction_change;
-            return total_price;
         }
     }
 
@@ -174,7 +267,7 @@ OOOOO
 OXOXO
 OOOOO";
 
-        assert_eq!(part2(dummy), 236);
+        assert_eq!(part2(dummy), 436);
     }
 
     #[test]
