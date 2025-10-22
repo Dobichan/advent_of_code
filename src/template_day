@@ -1,0 +1,45 @@
+use advent_of_code::parsing::*;
+
+fn part1(lines: &Vec<String>) -> i64 {
+    0
+}
+
+fn part2(lines: &Vec<String>) -> i64 {
+    0
+}
+
+fn main() {
+    const YEAR: u16 = ;
+    const DAY: u8 = ;
+
+    let input = read_input_lines(YEAR, DAY);
+
+    let start = std::time::Instant::now();
+    let answer1 = part1(&input);
+
+    println!("Answer part 1: {answer1}");
+
+    let end = std::time::Instant::now();
+    println!("Elapsed: {:.3} us", (end - start).as_secs_f64() * 1000000.0);
+
+    let start = std::time::Instant::now();
+    let answer2 = part2(&input);
+
+    println!("Answer part 2: {answer2}");
+
+    let end = std::time::Instant::now();
+    println!("Elapsed: {:.3} us", (end - start).as_secs_f64() * 1000000.0);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part1() {
+    }
+
+    #[test]
+    fn test_part2() {
+    }
+}
