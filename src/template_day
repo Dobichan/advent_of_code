@@ -16,19 +16,20 @@ fn main() {
 
     let start = std::time::Instant::now();
     let answer1 = part1(&input);
-
-    println!("Answer part 1: {answer1}");
-
     let end = std::time::Instant::now();
+
+    println!("");
+    println!("Answer part 1: {answer1}");
     println!("Elapsed: {:.3} us", (end - start).as_secs_f64() * 1000000.0);
+    println!("");
 
     let start = std::time::Instant::now();
     let answer2 = part2(&input);
+    let end = std::time::Instant::now();
 
     println!("Answer part 2: {answer2}");
-
-    let end = std::time::Instant::now();
     println!("Elapsed: {:.3} us", (end - start).as_secs_f64() * 1000000.0);
+    println!("");
 }
 
 #[cfg(test)]
