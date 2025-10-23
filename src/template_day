@@ -20,7 +20,7 @@ fn main() {
 
     println!("");
     println!("Answer part 1: {answer1}");
-    println!("Elapsed: {:.3} us", (end - start).as_secs_f64() * 1000000.0);
+    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
     println!("");
 
     let start = std::time::Instant::now();
@@ -28,7 +28,7 @@ fn main() {
     let end = std::time::Instant::now();
 
     println!("Answer part 2: {answer2}");
-    println!("Elapsed: {:.3} us", (end - start).as_secs_f64() * 1000000.0);
+    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
     println!("");
 }
 
