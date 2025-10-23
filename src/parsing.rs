@@ -31,9 +31,15 @@ pub fn numbers_to_pair(line: &str) -> (i64, i64) {
     )
 }
 
+pub fn line_numbers_to_vec(line: &str) -> Vec<i64> {
+    line.split_whitespace()
+        .map(|elem| elem.parse::<i64>().expect("Not a number in list: {elem}"))
+        .collect()
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::parsing::numbers_to_pair;
+    use crate::parsing::{line_numbers_to_vec, numbers_to_pair};
 
     #[test]
     fn test_number_to_pair() {
@@ -72,5 +78,44 @@ mod tests {
         let (a, b) = numbers_to_pair("  7    8  ");
         assert_eq!(a, 7);
         assert_eq!(b, 8);
+    }
+
+    #[test]
+    fn test_numbers_to_vec() {
+        let test = line_numbers_to_vec("1 2 3 4 5 6 7");
+
+        assert_eq!(test, [1, 2, 3, 4, 5, 6, 7]);
+    }
+
+    #[test]
+    fn test_numbers_to_vec_failures() {
+        // Test that line_numbers_to_vec panics when input contains non-numeric values
+        let result = std::panic::catch_unwind(|| {
+            line_numbers_to_vec("1 2 a 4");
+        });
+        assert!(result.is_err());
+
+        // Test that line_numbers_to_vec panics when input contains empty string
+        let result = std::panic::catch_unwind(|| {
+            line_numbers_to_vec("");
+        });
+
+        // This should not panic, it should return an empty Vec
+        assert!(result.is_ok());
+        assert_eq!(line_numbers_to_vec(""), Vec::<i64>::new());
+
+        // Test that line_numbers_to_vec works with negative numbers
+        let test = line_numbers_to_vec("-1 -2 3");
+        assert_eq!(test, [-1, -2, 3]);
+
+        // Test that line_numbers_to_vec works with extra whitespace
+        let test = line_numbers_to_vec("   4   5  6 ");
+        assert_eq!(test, [4, 5, 6]);
+
+        // Test that line_numbers_to_vec panics when input contains floating point numbers
+        let result = std::panic::catch_unwind(|| {
+            line_numbers_to_vec("1 2.5 3");
+        });
+        assert!(result.is_err());
     }
 }
