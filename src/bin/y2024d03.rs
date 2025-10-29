@@ -1,43 +1,79 @@
 use advent_of_code::parsing::*;
-use regex::Regex;
+use nom::IResult;
+use nom::Parser;
+use nom::branch::alt;
+use nom::bytes::complete::tag;
+use nom::character::complete::{self, anychar};
+use nom::combinator::value;
+use nom::multi::{many_till, many1};
+use nom::sequence::{delimited, separated_pair};
+
+#[derive(Debug, Clone)]
+enum Instruction {
+    Mul(i64, i64),
+    Do,
+    Dont,
+}
+
+fn mul_instruction(input: &str) -> IResult<&str, Instruction> {
+    let (input, _) = tag("mul")(input)?;
+    let (input, numbers) = delimited(
+        tag("("),
+        separated_pair(complete::i64, tag(","), complete::i64),
+        tag(")"),
+    )
+    .parse(input)?;
+
+    Ok((input, Instruction::Mul(numbers.0, numbers.1)))
+}
+
+fn instruction(input: &str) -> IResult<&str, Instruction> {
+    alt((
+        value(Instruction::Do, tag("do()")),
+        value(Instruction::Dont, tag("don't()")),
+        mul_instruction,
+    ))
+    .parse(input)
+}
 
 fn part1(input: &str) -> i64 {
-    let re = Regex::new(r"mul\((\d+),(\d+)\)").unwrap();
+    let (_, instructions) =
+        many1(many_till(anychar, mul_instruction).map(|(_skip, instruction)| instruction))
+            .parse(input)
+            .unwrap();
 
-    let mut result = 0;
-
-    for cap in re.captures_iter(input) {
-        let a: i64 = cap.get(1).unwrap().as_str().parse().unwrap();
-        let b: i64 = cap.get(2).unwrap().as_str().parse().unwrap();
-
-        result += a * b;
-    }
-    result
+    instructions
+        .iter()
+        .map(|instruction| match instruction {
+            Instruction::Mul(a, b) => a * b,
+            _ => 0,
+        })
+        .sum()
 }
 
 fn part2(input: &str) -> i64 {
-    let re = Regex::new(r"(?:mul\((\d+),(\d+)\)|do\(\)|don't\(\))").unwrap();
+    let (_, instructions) =
+        many1(many_till(anychar, instruction).map(|(_skip, instruction)| instruction))
+            .parse(input)
+            .unwrap();
 
-    let mut result = 0;
-    let mut enabled = true;
-
-    for cap in re.captures_iter(input) {
-        let instruction = cap.get(0).unwrap().as_str();
-
-        if instruction == "do()" {
-            enabled = true;
-        } else if instruction == "don't()" {
-            enabled = false;
-        } else {
-            if enabled {
-                let a: i64 = cap.get(1).unwrap().as_str().parse().unwrap();
-                let b: i64 = cap.get(2).unwrap().as_str().parse().unwrap();
-
-                result += a * b;
-            }
-        }
-    }
-    result
+    instructions
+        .iter()
+        .fold(
+            (true, 0),
+            |(process, total), instruction| match instruction {
+                Instruction::Do => (true, total),
+                Instruction::Dont => (false, total),
+                Instruction::Mul(a, b) => {
+                    if process {
+                        (process, total + a * b)
+                    } else {
+                        (process, total)
+                    }
+                }
+            },
+        )
+        .1
 }
 
 fn main() {
