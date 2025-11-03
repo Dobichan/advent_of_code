@@ -10,7 +10,7 @@ enum Direction {
     West,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Guard {
     position: (i32, i32),
     direction: Direction,
@@ -65,10 +65,23 @@ fn move_guard(world: &mut Grid, guard: &mut Guard) {
     }
 }
 
-fn part1(input: &str) -> i64 {
-    let mut input_grid: Grid = input.parse().unwrap();
+fn guard_inside_grid(guard: &Guard, world: &Grid) -> bool {
+    world.inside((guard.position.0 as usize, guard.position.1 as usize))
+}
 
-    let guard_pos = input_grid
+fn get_position_ahead(guard: &Guard) -> (i32, i32) {
+    match guard.direction {
+        Direction::North => (guard.position.0, guard.position.1 - 1),
+        Direction::East => (guard.position.0 + 1, guard.position.1),
+        Direction::South => (guard.position.0, guard.position.1 + 1),
+        Direction::West => (guard.position.0 - 1, guard.position.1),
+    }
+}
+
+fn part1(input: &str) -> i64 {
+    let mut world: Grid = input.parse().unwrap();
+
+    let guard_pos = world
         .find('^')
         .expect("Could not find initial guard position");
     let mut guard = Guard {
@@ -78,11 +91,11 @@ fn part1(input: &str) -> i64 {
         repeating: false,
     };
 
-    while input_grid.inside((guard.position.0 as usize, guard.position.1 as usize)) {
-        move_guard(&mut input_grid, &mut guard);
+    while guard_inside_grid(&guard, &world) {
+        move_guard(&mut world, &mut guard);
     }
 
-    input_grid.into_iter().filter(|e| e.1 == &'X').count() as i64
+    world.into_iter().filter(|e| e.1 == &'X').count() as i64
 }
 
 fn part2(input: &str) -> i64 {
