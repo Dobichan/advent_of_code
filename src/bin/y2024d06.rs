@@ -118,9 +118,7 @@ fn part2(input: &str) -> i64 {
             .find('^')
             .expect("Could not find initial guard position");
 
-        if test_pos.0.0 == guard_pos.0 && test_pos.0.1 == guard_pos.1 {
-            dbg!(test_pos);
-            println!("Skipping start {:?}", guard_pos);
+        if test_pos.0 == guard_pos {
             continue;
         }
 
