@@ -69,15 +69,6 @@ fn guard_inside_grid(guard: &Guard, world: &Grid) -> bool {
     world.inside((guard.position.0 as usize, guard.position.1 as usize))
 }
 
-fn get_position_ahead(guard: &Guard) -> (i32, i32) {
-    match guard.direction {
-        Direction::North => (guard.position.0, guard.position.1 - 1),
-        Direction::East => (guard.position.0 + 1, guard.position.1),
-        Direction::South => (guard.position.0, guard.position.1 + 1),
-        Direction::West => (guard.position.0 - 1, guard.position.1),
-    }
-}
-
 fn part1(input: &str) -> i64 {
     let mut world: Grid = input.parse().unwrap();
 
