@@ -19,7 +19,7 @@ impl Operator {
         match self {
             Operator::Add => a + b,
             Operator::Mul => a * b,
-            Operator::Concat => (a.to_string() + b.to_string().as_str()).parse().unwrap(),
+            Operator::Concat => a * 10_i64.pow(b.ilog10() + 1) + b,
         }
     }
 }
