@@ -32,7 +32,6 @@ pub trait AoCSolution {
         );
     }
 }
-// include!(concat!(env!("OUT_DIR"), "/solution_registry.rs"));
 
 type SolutionConstructor = fn() -> Box<dyn AoCSolution>;
 
@@ -40,18 +39,18 @@ pub fn get_solutions() -> HashMap<(u16, u8), SolutionConstructor> {
     let mut map: HashMap<(u16, u8), SolutionConstructor> = HashMap::new();
 
     // 2015 ----------------------------------
-    // map.insert((2015, 1), || {
-    //     Box::new(solutions::y2015::y2015d01::Solution {})
-    // });
-    // map.insert((2015, 2), || {
-    //     Box::new(solutions::y2015::y2015d02::Solution {})
-    // });
-    // map.insert((2015, 3), || {
-    //     Box::new(solutions::y2015::y2015d03::Solution {})
-    // });
-    // map.insert((2015, 4), || {
-    //     Box::new(solutions::y2015::y2015d04::Solution {})
-    // });
+    map.insert((2015, 1), || {
+        Box::new(solutions::y2015::y2015d01::Solution {})
+    });
+    map.insert((2015, 2), || {
+        Box::new(solutions::y2015::y2015d02::Solution {})
+    });
+    map.insert((2015, 3), || {
+        Box::new(solutions::y2015::y2015d03::Solution {})
+    });
+    map.insert((2015, 4), || {
+        Box::new(solutions::y2015::y2015d04::Solution {})
+    });
     // map.insert((2015, 5), || {
     //     Box::new(solutions::y2015::y2015d05::Solution {})
     // });
