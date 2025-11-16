@@ -1,6 +1,8 @@
+use crate::{AoCSolution, grid::Grid};
 use std::{collections::HashMap, usize};
 
-use advent_of_code::{grid::Grid, parsing::*};
+const YEAR: u16 = 2024;
+const DAY: u8 = 6;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 enum Direction {
@@ -69,62 +71,23 @@ fn guard_inside_grid(guard: &Guard, world: &Grid) -> bool {
     world.inside((guard.position.0 as usize, guard.position.1 as usize))
 }
 
-fn part1(input: &str) -> i64 {
-    let mut world: Grid = input.parse().unwrap();
+pub struct Solution {}
 
-    let guard_pos = world
-        .find('^')
-        .expect("Could not find initial guard position");
-    let mut guard = Guard {
-        position: (guard_pos.0 as i32, guard_pos.1 as i32),
-        direction: Direction::North,
-        positions: HashMap::new(),
-        repeating: false,
-    };
-
-    while guard_inside_grid(&guard, &world) {
-        move_guard(&mut world, &mut guard);
+impl AoCSolution for Solution {
+    fn year(&self) -> u16 {
+        YEAR
     }
 
-    world.into_iter().filter(|e| e.1 == &'X').count() as i64
-}
-
-fn part2(input: &str) -> i64 {
-    let start_grid: Grid = input.parse().unwrap();
-
-    let mut ret = 0;
-
-    let mut base_world = start_grid.clone();
-    let guard_pos = base_world
-        .find('^')
-        .expect("Could not find initial guard position");
-    let mut guard = Guard {
-        position: (guard_pos.0 as i32, guard_pos.1 as i32),
-        direction: Direction::North,
-        positions: HashMap::new(),
-        repeating: false,
-    };
-
-    while base_world.inside((guard.position.0 as usize, guard.position.1 as usize))
-        && !guard.repeating
-    {
-        move_guard(&mut base_world, &mut guard);
+    fn day(&self) -> u8 {
+        DAY
     }
 
-    for test_pos in base_world.into_iter().filter(|p| p.1 == &'X') {
-        let mut world = start_grid.clone();
+    fn part1(&self, input: &str) -> String {
+        let mut world: Grid = input.parse().unwrap();
 
         let guard_pos = world
             .find('^')
             .expect("Could not find initial guard position");
-
-        if test_pos.0 == guard_pos {
-            continue;
-        }
-
-        // Add obstacle
-        world[test_pos.0.1][test_pos.0.0] = '#';
-
         let mut guard = Guard {
             position: (guard_pos.0 as i32, guard_pos.1 as i32),
             direction: Direction::North,
@@ -132,42 +95,73 @@ fn part2(input: &str) -> i64 {
             repeating: false,
         };
 
-        while world.inside((guard.position.0 as usize, guard.position.1 as usize))
-            && !guard.repeating
-        {
+        while guard_inside_grid(&guard, &world) {
             move_guard(&mut world, &mut guard);
         }
 
-        if guard.repeating {
-            ret += 1;
-        }
+        world
+            .into_iter()
+            .filter(|e| e.1 == &'X')
+            .count()
+            .to_string()
     }
 
-    ret
-}
+    fn part2(&self, input: &str) -> String {
+        let start_grid: Grid = input.parse().unwrap();
 
-fn main() {
-    const YEAR: u16 = 2024;
-    const DAY: u8 = 6;
+        let mut ret = 0;
 
-    let input = read_input(YEAR, DAY);
+        let mut base_world = start_grid.clone();
+        let guard_pos = base_world
+            .find('^')
+            .expect("Could not find initial guard position");
+        let mut guard = Guard {
+            position: (guard_pos.0 as i32, guard_pos.1 as i32),
+            direction: Direction::North,
+            positions: HashMap::new(),
+            repeating: false,
+        };
 
-    let start = std::time::Instant::now();
-    let answer1 = part1(&input);
-    let end = std::time::Instant::now();
+        while base_world.inside((guard.position.0 as usize, guard.position.1 as usize))
+            && !guard.repeating
+        {
+            move_guard(&mut base_world, &mut guard);
+        }
 
-    println!("");
-    println!("Answer part 1: {answer1}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
+        for test_pos in base_world.into_iter().filter(|p| p.1 == &'X') {
+            let mut world = start_grid.clone();
 
-    let start = std::time::Instant::now();
-    let answer2 = part2(&input);
-    let end = std::time::Instant::now();
+            let guard_pos = world
+                .find('^')
+                .expect("Could not find initial guard position");
 
-    println!("Answer part 2: {answer2}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
+            if test_pos.0 == guard_pos {
+                continue;
+            }
+
+            // Add obstacle
+            world[test_pos.0.1][test_pos.0.0] = '#';
+
+            let mut guard = Guard {
+                position: (guard_pos.0 as i32, guard_pos.1 as i32),
+                direction: Direction::North,
+                positions: HashMap::new(),
+                repeating: false,
+            };
+
+            while world.inside((guard.position.0 as usize, guard.position.1 as usize))
+                && !guard.repeating
+            {
+                move_guard(&mut world, &mut guard);
+            }
+
+            if guard.repeating {
+                ret += 1;
+            }
+        }
+
+        ret.to_string()
+    }
 }
 
 #[cfg(test)]
@@ -188,7 +182,9 @@ mod tests {
         #.........
         ......#...";
 
-        assert_eq!(part1(EXAMPLE_INPUT.trim()), 41);
+        let sol = Solution {};
+
+        assert_eq!(sol.part1(EXAMPLE_INPUT.trim()), "41");
     }
 
     #[test]
@@ -205,6 +201,8 @@ mod tests {
         #.........
         ......#...";
 
-        assert_eq!(part2(EXAMPLE_INPUT.trim()), 6);
+        let sol = Solution {};
+
+        assert_eq!(sol.part2(EXAMPLE_INPUT.trim()), "6");
     }
 }

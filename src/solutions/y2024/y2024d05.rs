@@ -1,12 +1,13 @@
-use advent_of_code::parsing::*;
-
+use crate::AoCSolution;
 use multimap::MultiMap;
-
 use nom::bytes::complete::tag;
 use nom::character::complete::i64;
 use nom::multi::separated_list1;
 use nom::sequence::separated_pair;
 use nom::{IResult, Parser};
+
+const YEAR: u16 = 2024;
+const DAY: u8 = 5;
 
 #[derive(Debug)]
 struct PrintJob {
@@ -92,56 +93,44 @@ fn parse(input: &str) -> (MultiMap<i64, i64>, Vec<PrintJob>) {
     (map, all_jobs)
 }
 
-fn part1(input: &str) -> i64 {
-    let (rules, jobs) = parse(input);
+pub struct Solution {}
 
-    let mut ret = 0;
-    for job in jobs {
-        if job.is_valid(&rules) {
-            ret += job.get_middle_page();
-        }
+impl AoCSolution for Solution {
+    fn year(&self) -> u16 {
+        YEAR
     }
 
-    ret
-}
-
-fn part2(input: &str) -> i64 {
-    let (rules, jobs) = parse(input);
-
-    let mut ret = 0;
-    for job in jobs {
-        if !job.is_valid(&rules) {
-            let shuffled = job.get_correct_page_order(&rules);
-
-            ret += shuffled.get_middle_page();
-        }
+    fn day(&self) -> u8 {
+        DAY
     }
 
-    ret
-}
+    fn part1(&self, input: &str) -> String {
+        let (rules, jobs) = parse(input);
 
-fn main() {
-    const YEAR: u16 = 2024;
-    const DAY: u8 = 5;
+        let mut ret = 0;
+        for job in jobs {
+            if job.is_valid(&rules) {
+                ret += job.get_middle_page();
+            }
+        }
 
-    let input = read_input(YEAR, DAY);
+        ret.to_string()
+    }
 
-    let start = std::time::Instant::now();
-    let answer1 = part1(&input);
-    let end = std::time::Instant::now();
+    fn part2(&self, input: &str) -> String {
+        let (rules, jobs) = parse(input);
 
-    println!("");
-    println!("Answer part 1: {answer1}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
+        let mut ret = 0;
+        for job in jobs {
+            if !job.is_valid(&rules) {
+                let shuffled = job.get_correct_page_order(&rules);
 
-    let start = std::time::Instant::now();
-    let answer2 = part2(&input);
-    let end = std::time::Instant::now();
+                ret += shuffled.get_middle_page();
+            }
+        }
 
-    println!("Answer part 2: {answer2}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
+        ret.to_string()
+    }
 }
 
 #[cfg(test)]
@@ -180,7 +169,8 @@ mod tests {
         61,13,29
         97,13,75,29,47";
 
-        assert_eq!(part1(EXAMPLE_INPUT), 143)
+        let sol = Solution {};
+        assert_eq!(sol.part1(EXAMPLE_INPUT), "143")
     }
 
     #[test]
@@ -215,6 +205,7 @@ mod tests {
         61,13,29
         97,13,75,29,47";
 
-        assert_eq!(part2(EXAMPLE_INPUT), 123)
+        let sol = Solution {};
+        assert_eq!(sol.part2(EXAMPLE_INPUT), "123")
     }
 }

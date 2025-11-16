@@ -1,4 +1,4 @@
-use advent_of_code::parsing::*;
+use crate::AoCSolution;
 use nom::{
     IResult, Parser,
     bytes::tag,
@@ -6,6 +6,9 @@ use nom::{
     multi::separated_list1,
     sequence::{separated_pair, terminated},
 };
+
+const YEAR: u16 = 2024;
+const DAY: u8 = 7;
 
 #[derive(Debug)]
 enum Operator {
@@ -95,62 +98,50 @@ fn parse_line(line: &str) -> Equation {
     Equation::new(sum, numbers)
 }
 
-fn part1(input: &str) -> i64 {
-    let mut answer = 0;
-    for line in input.lines() {
-        let mut equation = parse_line(line.trim());
-        while !equation.is_valid() {
-            if !equation.permute_operations(false) {
-                break;
+pub struct Solution {}
+
+impl AoCSolution for Solution {
+    fn year(&self) -> u16 {
+        YEAR
+    }
+
+    fn day(&self) -> u8 {
+        DAY
+    }
+
+    fn part1(&self, input: &str) -> String {
+        let mut answer = 0;
+        for line in input.lines() {
+            let mut equation = parse_line(line.trim());
+            while !equation.is_valid() {
+                if !equation.permute_operations(false) {
+                    break;
+                }
+            }
+
+            if equation.is_valid() {
+                answer += equation.expected_sum;
             }
         }
-
-        if equation.is_valid() {
-            answer += equation.expected_sum;
-        }
+        answer.to_string()
     }
-    answer
-}
 
-fn part2(input: &str) -> i64 {
-    let mut answer = 0;
-    for line in input.lines() {
-        let mut equation = parse_line(line.trim());
-        while !equation.is_valid() {
-            if !equation.permute_operations(true) {
-                break;
+    fn part2(&self, input: &str) -> String {
+        let mut answer = 0;
+        for line in input.lines() {
+            let mut equation = parse_line(line.trim());
+            while !equation.is_valid() {
+                if !equation.permute_operations(true) {
+                    break;
+                }
+            }
+
+            if equation.is_valid() {
+                answer += equation.expected_sum;
             }
         }
-
-        if equation.is_valid() {
-            answer += equation.expected_sum;
-        }
+        answer.to_string()
     }
-    answer
-}
-
-fn main() {
-    const YEAR: u16 = 2024;
-    const DAY: u8 = 7;
-
-    let input = read_input(YEAR, DAY);
-
-    let start = std::time::Instant::now();
-    let answer1 = part1(&input);
-    let end = std::time::Instant::now();
-
-    println!("");
-    println!("Answer part 1: {answer1}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
-
-    let start = std::time::Instant::now();
-    let answer2 = part2(&input);
-    let end = std::time::Instant::now();
-
-    println!("Answer part 2: {answer2}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
 }
 
 #[cfg(test)]
@@ -171,7 +162,9 @@ mod tests {
             292: 11 6 16 20
             ";
 
-        assert_eq!(part1(EXAMPLE_INPUT.trim()), 3749)
+        let sol = Solution {};
+
+        assert_eq!(sol.part1(EXAMPLE_INPUT.trim()), "3749")
     }
 
     #[test]
@@ -188,6 +181,8 @@ mod tests {
             292: 11 6 16 20
             ";
 
-        assert_eq!(part2(EXAMPLE_INPUT.trim()), 11387)
+        let sol = Solution {};
+
+        assert_eq!(sol.part2(EXAMPLE_INPUT.trim()), "11387")
     }
 }

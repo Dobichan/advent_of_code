@@ -15,6 +15,10 @@ pub fn read_input_lines(year: u16, day: u8) -> Vec<String> {
         .collect()
 }
 
+pub fn input_to_vectors(input: &str) -> Vec<String> {
+    input.trim().lines().map(|s| s.to_string()).collect()
+}
+
 pub fn numbers_to_pair(line: &str) -> (i64, i64) {
     let mut splits = line.split_whitespace();
     (

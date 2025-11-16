@@ -1,5 +1,8 @@
-use advent_of_code::grid::*;
-use advent_of_code::parsing::*;
+use crate::AoCSolution;
+use crate::grid::*;
+
+const YEAR: u16 = 2024;
+const DAY: u8 = 4;
 
 enum Direction {
     UpLeft,
@@ -127,67 +130,53 @@ fn check_mas(grid: &Grid, x: usize, y: usize) -> bool {
     false
 }
 
-fn part1(grid: &Grid) -> i64 {
-    let mut ret = 0;
-    for y in 0..grid.height() {
-        for x in 0..grid.width() {
-            if grid[y][x] == 'X' {
-                for dir in DIRECTIONS {
-                    if check_xmas(grid, dir, x, y) {
+pub struct Solution {}
+
+impl AoCSolution for Solution {
+    fn year(&self) -> u16 {
+        YEAR
+    }
+
+    fn day(&self) -> u8 {
+        DAY
+    }
+
+    fn part1(&self, input: &str) -> String {
+        let mut ret = 0;
+        let grid: Grid = input.parse().expect("Failed to parse grid");
+        for y in 0..grid.height() {
+            for x in 0..grid.width() {
+                if grid[y][x] == 'X' {
+                    for dir in DIRECTIONS {
+                        if check_xmas(&grid, dir, x, y) {
+                            ret += 1;
+                        }
+                    }
+                }
+            }
+        }
+        ret.to_string()
+    }
+
+    fn part2(&self, input: &str) -> String {
+        let mut ret = 0;
+        let grid: Grid = input.parse().expect("Failed to parse grid");
+
+        for y in 0..grid.height() {
+            for x in 0..grid.width() {
+                if grid[y][x] == 'A' {
+                    if check_mas(&grid, x, y) {
                         ret += 1;
                     }
                 }
             }
         }
+        ret.to_string()
     }
-    ret
-}
-
-fn part2(grid: &Grid) -> i64 {
-    let mut ret = 0;
-
-    for y in 0..grid.height() {
-        for x in 0..grid.width() {
-            if grid[y][x] == 'A' {
-                if check_mas(grid, x, y) {
-                    ret += 1;
-                }
-            }
-        }
-    }
-    ret
-}
-
-fn main() {
-    const YEAR: u16 = 2024;
-    const DAY: u8 = 4;
-
-    let input = read_input(YEAR, DAY);
-
-    let start = std::time::Instant::now();
-    let grid: Grid = input.parse().expect("Failed to parse grid");
-    let answer1 = part1(&grid);
-    let end = std::time::Instant::now();
-
-    println!("");
-    println!("Answer part 1: {answer1}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
-
-    let start = std::time::Instant::now();
-    let grid: Grid = input.parse().expect("Failed to parse grid");
-    let answer2 = part2(&grid);
-    let end = std::time::Instant::now();
-
-    println!("Answer part 2: {answer2}");
-    println!("Elapsed: {:.3} ms", (end - start).as_secs_f64() * 1000.0);
-    println!("");
 }
 
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
-
     use super::*;
 
     #[test]
@@ -204,9 +193,8 @@ mod tests {
         MAMMMXMMMM
         MXMXAXMASX";
 
-        let grid = Grid::from_str(EXAMPLE_INPUT).unwrap();
-
-        assert_eq!(part1(&grid), 18);
+        let sol = Solution {};
+        assert_eq!(sol.part1(EXAMPLE_INPUT), "18");
     }
 
     #[test]
@@ -223,8 +211,7 @@ mod tests {
         MAMMMXMMMM
         MXMXAXMASX";
 
-        let grid = Grid::from_str(EXAMPLE_INPUT).unwrap();
-
-        assert_eq!(part2(&grid), 9);
+        let sol = Solution {};
+        assert_eq!(sol.part2(EXAMPLE_INPUT), "9");
     }
 }
