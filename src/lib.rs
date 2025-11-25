@@ -753,9 +753,9 @@ pub fn get_solutions() -> HashMap<(u16, u8), SolutionConstructor> {
     map.insert((2024, 7), || {
         Box::new(solutions::y2024::y2024d07::Solution {})
     });
-    // map.insert((2024, 8), || {
-    //     Box::new(solutions::y2024::y2024d08::Solution {})
-    // });
+    map.insert((2024, 8), || {
+        Box::new(solutions::y2024::y2024d08::Solution {})
+    });
     // map.insert((2024, 9), || {
     //     Box::new(solutions::y2024::y2024d09::Solution {})
     // });
