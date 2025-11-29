@@ -7,7 +7,7 @@ pub mod y2024d06;
 pub mod y2024d07;
 pub mod y2024d08;
 pub mod y2024d09;
-// pub mod y2024d10;
+pub mod y2024d10;
 // pub mod y2024d11;
 // pub mod y2024d12;
 // pub mod y2024d13;
