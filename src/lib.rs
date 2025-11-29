@@ -11,8 +11,8 @@ pub trait AoCSolution {
     fn part1(&self, input: &str) -> String;
     fn part2(&self, input: &str) -> String;
 
-    fn run(&self) {
-        let input = crate::parsing::read_input(self.year(), self.day());
+    fn run(&self, input_file: &str) {
+        let input = crate::parsing::read_input(input_file);
         println!("-- Advent of Code {} day {} --", self.year(), self.day());
 
         let start = std::time::Instant::now();
@@ -28,6 +28,38 @@ pub trait AoCSolution {
         let end = std::time::Instant::now();
         println!(
             "Part 1: {answer} - in {:.3} ms",
+            (end - start).as_secs_f64() * 1000.0
+        );
+    }
+    fn run_part1(&self, input_file: &str) {
+        let input = crate::parsing::read_input(input_file);
+        println!(
+            "-- Advent of Code {} day {} Part1 --",
+            self.year(),
+            self.day()
+        );
+
+        let start = std::time::Instant::now();
+        let answer = self.part1(&input);
+        let end = std::time::Instant::now();
+        println!(
+            "Part 1: {answer} - in {:.3} ms",
+            (end - start).as_secs_f64() * 1000.0
+        );
+    }
+    fn run_part2(&self, input_file: &str) {
+        let input = crate::parsing::read_input(input_file);
+        println!(
+            "-- Advent of Code {} day {} Part2 --",
+            self.year(),
+            self.day()
+        );
+
+        let start = std::time::Instant::now();
+        let answer = self.part2(&input);
+        let end = std::time::Instant::now();
+        println!(
+            "Part 2: {answer} - in {:.3} ms",
             (end - start).as_secs_f64() * 1000.0
         );
     }
@@ -759,9 +791,9 @@ pub fn get_solutions() -> HashMap<(u16, u8), SolutionConstructor> {
     map.insert((2024, 9), || {
         Box::new(solutions::y2024::y2024d09::Solution {})
     });
-    // map.insert((2024, 10), || {
-    //     Box::new(solutions::y2024::y2024d10::Solution {})
-    // });
+    map.insert((2024, 10), || {
+        Box::new(solutions::y2024::y2024d10::Solution {})
+    });
     // map.insert((2024, 11), || {
     //     Box::new(solutions::y2024::y2024d11::Solution {})
     // });

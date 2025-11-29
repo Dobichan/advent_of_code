@@ -8,4 +8,4 @@ fi
 year=$1
 day=$(printf "%02d" $2)
 
-cargo run --release ${year} ${day}
+cargo run --release ${year} ${day} input/$year/day$day.txt a

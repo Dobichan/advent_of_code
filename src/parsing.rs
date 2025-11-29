@@ -1,15 +1,14 @@
 use std::fs;
 use std::path::Path;
 
-pub fn read_input(year: u16, day: u8) -> String {
-    let filename = format!("day{:02}.txt", day);
-    let path = Path::new("input").join(year.to_string()).join(filename);
+pub fn read_input(input_file: &str) -> String {
+    let path = Path::new(input_file);
 
     fs::read_to_string(&path).unwrap_or_else(|_| panic!("Could not read input file: {:?}", path))
 }
 
-pub fn read_input_lines(year: u16, day: u8) -> Vec<String> {
-    read_input(year, day)
+pub fn read_input_lines(input_file: &str) -> Vec<String> {
+    read_input(input_file)
         .lines()
         .map(|s| s.to_string())
         .collect()
