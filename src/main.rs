@@ -4,7 +4,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() != 5 {
-        eprintln!("Uage: cargo run <YEAR> <DAY> <file> <part>");
+        eprintln!("Uage: advent_of_code <YEAR> <DAY> <file> <part>");
         eprintln!("      <file> - path to file with input");
         eprintln!("      <part> - which part to solve, 1 | 2 | a(ll)");
         return;
