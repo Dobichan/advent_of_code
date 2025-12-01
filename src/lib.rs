@@ -27,7 +27,7 @@ pub trait AoCSolution {
         let answer = self.part2(&input);
         let end = std::time::Instant::now();
         println!(
-            "Part 1: {answer} - in {:.3} ms",
+            "Part 2: {answer} - in {:.3} ms",
             (end - start).as_secs_f64() * 1000.0
         );
     }
@@ -841,9 +841,9 @@ pub fn get_solutions() -> HashMap<(u16, u8), SolutionConstructor> {
     // });
 
     // 2025 ----------------------------------
-    //     map.insert((2025, 1), || {
-    //         Box::new(solutions::y2025::y2025d01::Solution {})
-    //     });
+    map.insert((2025, 1), || {
+        Box::new(solutions::y2025::y2025d01::Solution {})
+    });
     //     map.insert((2025, 2), || {
     //         Box::new(solutions::y2025::y2025d02::Solution {})
     //     });
@@ -877,16 +877,6 @@ pub fn get_solutions() -> HashMap<(u16, u8), SolutionConstructor> {
     //     map.insert((2025, 12), || {
     //         Box::new(solutions::y2025::y2025d12::Solution {})
     //     });
-
-    // map.insert((2024, 1), || {
-    //     Box::new(solutions::y2024::y2024d01::Solution {})
-    // });
-    // map.insert((2024, 2), || {
-    //     Box::new(solutions::y2024::y2024d02::Solution {})
-    // });
-    // map.insert((2024, 3), || {
-    //     Box::new(solutions::y2024::y2024d02::Solution {})
-    // });
 
     map
 }

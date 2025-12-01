@@ -1,4 +1,4 @@
-// pub mod y2025d01;
+pub mod y2025d01;
 // pub mod y2025d02;
 // pub mod y2025d03;
 // pub mod y2025d04;
