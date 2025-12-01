@@ -15,8 +15,6 @@ fn main() {
     let file = &args[3];
     let part = &args[4];
 
-    println!("Running {year} - {day}");
-
     let solutions = get_solutions();
 
     if let Some(solution) = solutions.get(&(year, day)) {
