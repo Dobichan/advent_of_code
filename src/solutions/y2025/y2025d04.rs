@@ -52,19 +52,18 @@ pub fn removeable_paper_roll(grid: &Grid, row: usize, col: usize) -> bool {
     false
 }
 
-pub fn remove_rolls(grid: &Grid) -> (Grid, usize) {
-    let mut ret_grid = grid.clone();
-    let mut removeable = 0;
+pub fn remove_rolls(grid: &mut Grid) -> usize {
+    let mut removed = 0;
 
     for r in 0..grid.height() {
         for c in 0..grid.width() {
             if removeable_paper_roll(grid, r, c) {
-                removeable += 1;
-                ret_grid[r][c] = 'x';
+                removed += 1;
+                grid[r][c] = 'x';
             }
         }
     }
-    (ret_grid, removeable)
+    removed
 }
 
 impl AoCSolution for Solution {
@@ -94,12 +93,11 @@ impl AoCSolution for Solution {
         let mut ret = 0;
 
         loop {
-            let (new_grid, this_round) = remove_rolls(&grid);
-            if this_round == 0 {
+            let this_round_removed = remove_rolls(&mut grid);
+            if this_round_removed == 0 {
                 break;
             }
-            ret += this_round;
-            grid = new_grid;
+            ret += this_round_removed;
             // println!("{grid}");
         }
 
