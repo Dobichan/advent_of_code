@@ -85,7 +85,7 @@ impl ProductIdRange {
 
 fn parse(input: &str) -> Vec<ProductIdRange> {
     let mut ret = Vec::with_capacity(30);
-    for part in input.split(',') {
+    for part in input.trim().split(',') {
         let nums: Vec<_> = part.split('-').collect();
         let prod = ProductIdRange::new(nums[0], nums[1]);
         ret.push(prod);
