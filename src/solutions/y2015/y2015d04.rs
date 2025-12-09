@@ -15,7 +15,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let mut done = false;
         let mut append = 0;
 
@@ -32,7 +32,7 @@ impl AoCSolution for Solution {
         append.to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let mut done = false;
         let mut append = 0;
 
@@ -56,7 +56,7 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let sol = Solution {};
+        let mut sol = Solution {};
         const INPUT1: &str = "abcdef";
         assert_eq!(sol.part1(INPUT1), "609043");
     }

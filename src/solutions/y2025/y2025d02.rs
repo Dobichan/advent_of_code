@@ -124,7 +124,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let products = parse(input);
         let mut ret: u64 = 0;
 
@@ -136,7 +136,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let products = parse(input);
         let mut ret: u64 = 0;
 
@@ -267,7 +267,7 @@ mod tests {
                                      38593856-38593862,565653-565659,824824821-824824827,\
                                      2121212118-2121212124";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "1227775554");
@@ -325,7 +325,7 @@ mod tests {
                                      38593856-38593862,565653-565659,824824821-824824827,\
                                      2121212118-2121212124";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part2(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "4174379265");

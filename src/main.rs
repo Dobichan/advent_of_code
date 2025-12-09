@@ -18,7 +18,7 @@ fn main() {
     let solutions = get_solutions();
 
     if let Some(solution) = solutions.get(&(year, day)) {
-        let solution: Box<dyn AoCSolution> = solution();
+        let mut solution: Box<dyn AoCSolution> = solution();
         match part.chars().next().unwrap() {
             '1' => solution.run_part1(&file),
             '2' => solution.run_part2(&file),

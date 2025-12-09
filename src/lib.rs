@@ -8,10 +8,10 @@ pub mod solutions;
 pub trait AoCSolution {
     fn year(&self) -> u16;
     fn day(&self) -> u8;
-    fn part1(&self, input: &str) -> String;
-    fn part2(&self, input: &str) -> String;
+    fn part1(&mut self, input: &str) -> String;
+    fn part2(&mut self, input: &str) -> String;
 
-    fn run(&self, input_file: &str) {
+    fn run(&mut self, input_file: &str) {
         let input = crate::parsing::read_input(input_file);
         println!("-- Advent of Code {} day {} --", self.year(), self.day());
 
@@ -31,7 +31,7 @@ pub trait AoCSolution {
             (end - start).as_secs_f64() * 1000.0
         );
     }
-    fn run_part1(&self, input_file: &str) {
+    fn run_part1(&mut self, input_file: &str) {
         let input = crate::parsing::read_input(input_file);
         println!(
             "-- Advent of Code {} day {} Part1 --",
@@ -47,7 +47,7 @@ pub trait AoCSolution {
             (end - start).as_secs_f64() * 1000.0
         );
     }
-    fn run_part2(&self, input_file: &str) {
+    fn run_part2(&mut self, input_file: &str) {
         let input = crate::parsing::read_input(input_file);
         println!(
             "-- Advent of Code {} day {} Part2 --",
@@ -862,9 +862,12 @@ pub fn get_solutions() -> HashMap<(u16, u8), SolutionConstructor> {
     map.insert((2025, 7), || {
         Box::new(solutions::y2025::y2025d07::Solution {})
     });
-    //     map.insert((2025, 8), || {
-    //         Box::new(solutions::y2025::y2025d08::Solution {})
-    //     });
+    map.insert((2025, 8), || {
+        Box::new(solutions::y2025::y2025d08::Solution {
+            num_operations_part1: 1000,
+            ..Default::default()
+        })
+    });
     //     map.insert((2025, 9), || {
     //         Box::new(solutions::y2025::y2025d09::Solution {})
     //     });

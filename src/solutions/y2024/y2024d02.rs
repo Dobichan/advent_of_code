@@ -36,7 +36,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let mut count = 0;
 
         for line in input_to_vectors(input) {
@@ -50,7 +50,7 @@ impl AoCSolution for Solution {
         count.to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let mut count = 0;
 
         for line in input_to_vectors(input) {
@@ -91,7 +91,7 @@ mod tests {
             1 3 6 7 9
             "#;
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "2");
@@ -108,7 +108,7 @@ mod tests {
             1 3 6 7 9
             "#;
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part2(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "4");

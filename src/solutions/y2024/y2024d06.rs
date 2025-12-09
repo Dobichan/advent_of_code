@@ -82,7 +82,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let mut world: Grid = input.parse().unwrap();
 
         let guard_pos = world
@@ -106,7 +106,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let start_grid: Grid = input.parse().unwrap();
 
         let mut ret = 0;
@@ -182,7 +182,7 @@ mod tests {
         #.........
         ......#...";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         assert_eq!(sol.part1(EXAMPLE_INPUT.trim()), "41");
     }
@@ -201,7 +201,7 @@ mod tests {
         #.........
         ......#...";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         assert_eq!(sol.part2(EXAMPLE_INPUT.trim()), "6");
     }

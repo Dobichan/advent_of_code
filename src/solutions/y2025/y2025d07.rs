@@ -60,7 +60,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let mut grid: Grid = input.trim().parse().expect("Illegal input grid");
         let start_col = grid[0]
             .iter()
@@ -82,7 +82,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let mut grid: Grid = input.trim().parse().expect("Illegal input grid");
         let start_col = grid[0]
             .iter()
@@ -121,7 +121,7 @@ mod tests {
               .^.^.^.^.^...^.\n\
               ...............";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "21");
@@ -147,7 +147,7 @@ mod tests {
               .^.^.^.^.^...^.\n\
               ...............";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part2(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "40");

@@ -50,7 +50,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let (_, instructions) =
             many1(many_till(anychar, mul_instruction).map(|(_skip, instruction)| instruction))
                 .parse(input)
@@ -66,7 +66,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let (_, instructions) =
             many1(many_till(anychar, instruction).map(|(_skip, instruction)| instruction))
                 .parse(input)
@@ -102,7 +102,7 @@ mod tests {
         xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))
         "#;
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(EXAMPLE_INPUT.trim());
         assert_eq!(answer, "161");
     }
@@ -113,7 +113,7 @@ mod tests {
         xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
         "#;
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part2(EXAMPLE_INPUT.trim());
         assert_eq!(answer, "48");
     }

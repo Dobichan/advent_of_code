@@ -16,7 +16,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let (mut list1, mut list2) = input_to_vectors(&crate::parsing::input_to_vectors(input));
 
         list1.sort();
@@ -30,7 +30,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let (mut list1, mut list2) = input_to_vectors(&crate::parsing::input_to_vectors(input));
 
         list1.sort();
@@ -66,7 +66,7 @@ mod tests {
         assert_eq!(firsts, [3, 4, 2, 1, 3, 3]);
         assert_eq!(seconds, [4, 3, 5, 3, 9, 3]);
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "11");
@@ -83,7 +83,7 @@ mod tests {
             3   3
             "#;
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part2(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "31");

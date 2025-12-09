@@ -195,14 +195,14 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let disk = parse(input, false);
         let defrag = defragment(&disk);
 
         calculate_checksum(&defrag).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let mut disk = parse(input, true);
         let defrag = defragment_type2(&mut disk);
 
@@ -218,7 +218,7 @@ mod tests {
     fn test_part1_small() {
         const EXAMPLE_INPUT: &str = "12345";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "60");
@@ -228,7 +228,7 @@ mod tests {
     fn test_part1_larger() {
         const EXAMPLE_INPUT: &str = "2333133121414131402";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "1928");
@@ -238,7 +238,7 @@ mod tests {
     fn test_part2() {
         const EXAMPLE_INPUT: &str = "2333133121414131402";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part2(&EXAMPLE_INPUT);
 
         assert_eq!(answer, "2858");

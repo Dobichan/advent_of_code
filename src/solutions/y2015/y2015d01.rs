@@ -14,7 +14,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         input
             .chars()
             .map(|c| if c == '(' { 1 } else { -1 })
@@ -22,7 +22,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let mut lvl = 0;
         for (i, c) in input.chars().enumerate() {
             if c == '(' {
@@ -54,7 +54,7 @@ mod tests {
         const INPUT5A: &str = r")))";
         const INPUT5B: &str = r")())())";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         assert_eq!(sol.part1(INPUT1A), "0");
         assert_eq!(sol.part1(INPUT1B), "0");
@@ -72,7 +72,7 @@ mod tests {
         const INPUT1A: &str = r")";
         const INPUT1B: &str = r"()())";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         assert_eq!(sol.part2(INPUT1A), "1");
         assert_eq!(sol.part2(INPUT1B), "5");

@@ -63,7 +63,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         input
             .trim()
             .lines()
@@ -73,7 +73,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         input
             .trim()
             .lines()
@@ -90,7 +90,7 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let sol = Solution::new();
+        let mut sol = Solution::new();
 
         assert!(sol.is_nice_part1("ugknbfddgicrmopn"));
         assert!(sol.is_nice_part1("aaa"));
@@ -110,7 +110,7 @@ mod tests {
 
     #[test]
     fn test_part2() {
-        let sol = Solution::new();
+        let mut sol = Solution::new();
 
         assert!(sol.is_nice_part2("qjhvhtzxzqqjkmpb"));
         assert!(sol.is_nice_part2("xxyxx"));

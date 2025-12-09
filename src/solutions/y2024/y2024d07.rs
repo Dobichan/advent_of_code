@@ -109,7 +109,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let mut answer = 0;
         for line in input.lines() {
             let mut equation = parse_line(line.trim());
@@ -126,7 +126,7 @@ impl AoCSolution for Solution {
         answer.to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let mut answer = 0;
         for line in input.lines() {
             let mut equation = parse_line(line.trim());
@@ -162,7 +162,7 @@ mod tests {
             292: 11 6 16 20
             ";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         assert_eq!(sol.part1(EXAMPLE_INPUT.trim()), "3749")
     }
@@ -181,7 +181,7 @@ mod tests {
             292: 11 6 16 20
             ";
 
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         assert_eq!(sol.part2(EXAMPLE_INPUT.trim()), "11387")
     }

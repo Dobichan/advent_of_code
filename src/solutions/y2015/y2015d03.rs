@@ -14,7 +14,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let mut houses: HashMap<(i64, i64), i64> = HashMap::new();
         let mut pos = (0, 0);
         houses.insert(pos, 1);
@@ -33,7 +33,7 @@ impl AoCSolution for Solution {
         }
         houses.len().to_string()
     }
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let mut houses: HashMap<(i64, i64), i64> = HashMap::new();
         let mut santa_pos = (0, 0);
         let mut robo_santa_pos = (0, 0);
@@ -90,7 +90,7 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         const INPUT1: &str = ">";
         assert_eq!(sol.part1(INPUT1), "2");
@@ -104,7 +104,7 @@ mod tests {
 
     #[test]
     fn test_part2() {
-        let sol = Solution {};
+        let mut sol = Solution {};
 
         const INPUT1: &str = "^v";
         assert_eq!(sol.part2(INPUT1), "3");

@@ -33,7 +33,7 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&self, input: &str) -> String {
+    fn part1(&mut self, input: &str) -> String {
         let (grid, (width, height)) = parse(input);
         let mut result = HashMap::new();
 
@@ -74,7 +74,7 @@ impl AoCSolution for Solution {
         result.keys().count().to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part2(&mut self, input: &str) -> String {
         let (grid, (width, height)) = parse(input);
         let mut result = HashMap::new();
 
@@ -144,7 +144,7 @@ mod tests {
             ............
             "#;
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part1(&EXAMPLE_INPUT.trim());
 
         assert_eq!(answer, "14");
@@ -167,7 +167,7 @@ mod tests {
             ............
             "#;
 
-        let sol = Solution {};
+        let mut sol = Solution {};
         let answer = sol.part2(&EXAMPLE_INPUT.trim());
 
         assert_eq!(answer, "34");
