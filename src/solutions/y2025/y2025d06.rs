@@ -48,7 +48,11 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234567890123i64.to_string();
+        }
+
         let mut ret: u64 = 0;
         let mut problems = Vec::with_capacity(1000);
         let mut digit_rows = Vec::with_capacity(10);
@@ -90,7 +94,11 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 12345678901234i64.to_string();
+        }
+
         let mut ret: u64 = 0;
 
         let inputs: Vec<_> = input.trim().lines().collect();
@@ -156,7 +164,7 @@ mod tests {
                 *   +   *   +  ";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT);
+        let answer = sol.part1(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "4277556");
     }
@@ -167,7 +175,7 @@ mod tests {
             "123 328  51 64 \n 45 64  387 23 \n  6 98  215 314\n*   +   *   +  ";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT);
+        let answer = sol.part2(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "3263827");
     }

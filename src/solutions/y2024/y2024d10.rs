@@ -14,7 +14,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 123.to_string();
+        }
         let grid = parse(input);
         let rows = grid.len();
         let cols = grid[0].len();
@@ -29,7 +32,10 @@ impl AoCSolution for Solution {
         sum.to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let grid = parse(input);
         let rows = grid.len();
         let cols = grid[0].len();
@@ -159,7 +165,7 @@ mod tests {
             9111119"#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT);
+        let answer = sol.part1(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "2");
     }
@@ -176,7 +182,7 @@ mod tests {
             9111119"#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT);
+        let answer = sol.part2(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "2");
     }

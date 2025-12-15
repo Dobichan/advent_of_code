@@ -14,7 +14,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return input.chars().count().to_string();
+        }
         input
             .chars()
             .map(|c| if c == '(' { 1 } else { -1 })
@@ -22,7 +25,10 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return input.chars().count().to_string();
+        }
         let mut lvl = 0;
         for (i, c) in input.chars().enumerate() {
             if c == '(' {
@@ -56,15 +62,15 @@ mod tests {
 
         let mut sol = Solution {};
 
-        assert_eq!(sol.part1(INPUT1A), "0");
-        assert_eq!(sol.part1(INPUT1B), "0");
-        assert_eq!(sol.part1(INPUT2A), "3");
-        assert_eq!(sol.part1(INPUT2B), "3");
-        assert_eq!(sol.part1(INPUT3), "3");
-        assert_eq!(sol.part1(INPUT4A), "-1");
-        assert_eq!(sol.part1(INPUT4B), "-1");
-        assert_eq!(sol.part1(INPUT5A), "-3");
-        assert_eq!(sol.part1(INPUT5B), "-3");
+        assert_eq!(sol.part1(INPUT1A, false), "0");
+        assert_eq!(sol.part1(INPUT1B, false), "0");
+        assert_eq!(sol.part1(INPUT2A, false), "3");
+        assert_eq!(sol.part1(INPUT2B, false), "3");
+        assert_eq!(sol.part1(INPUT3, false), "3");
+        assert_eq!(sol.part1(INPUT4A, false), "-1");
+        assert_eq!(sol.part1(INPUT4B, false), "-1");
+        assert_eq!(sol.part1(INPUT5A, false), "-3");
+        assert_eq!(sol.part1(INPUT5B, false), "-3");
     }
 
     #[test]
@@ -74,7 +80,7 @@ mod tests {
 
         let mut sol = Solution {};
 
-        assert_eq!(sol.part2(INPUT1A), "1");
-        assert_eq!(sol.part2(INPUT1B), "5");
+        assert_eq!(sol.part2(INPUT1A, false), "1");
+        assert_eq!(sol.part2(INPUT1B, false), "5");
     }
 }

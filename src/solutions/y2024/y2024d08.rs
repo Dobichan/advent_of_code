@@ -33,7 +33,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 123.to_string();
+        }
         let (grid, (width, height)) = parse(input);
         let mut result = HashMap::new();
 
@@ -74,7 +77,10 @@ impl AoCSolution for Solution {
         result.keys().count().to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let (grid, (width, height)) = parse(input);
         let mut result = HashMap::new();
 
@@ -145,7 +151,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT.trim());
+        let answer = sol.part1(&EXAMPLE_INPUT.trim(), false);
 
         assert_eq!(answer, "14");
     }
@@ -168,7 +174,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT.trim());
+        let answer = sol.part2(&EXAMPLE_INPUT.trim(), false);
 
         assert_eq!(answer, "34");
     }

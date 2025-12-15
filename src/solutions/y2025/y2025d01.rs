@@ -43,7 +43,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return input.lines().count().to_string();
+        }
         let mut pos = 50;
         let mut ret = 0;
         for line in input.trim().lines() {
@@ -55,7 +58,10 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return input.lines().count().to_string();
+        }
         let mut pos = 50;
         let mut ret = 0;
 
@@ -89,7 +95,7 @@ mod tests {
             L82";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT);
+        let answer = sol.part1(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "3");
     }
@@ -108,7 +114,7 @@ mod tests {
             L82";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT);
+        let answer = sol.part2(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "6");
     }

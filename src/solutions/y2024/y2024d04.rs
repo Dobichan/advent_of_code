@@ -141,7 +141,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let mut ret = 0;
         let grid: Grid = input.parse().expect("Failed to parse grid");
         for y in 0..grid.height() {
@@ -158,7 +161,10 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let mut ret = 0;
         let grid: Grid = input.parse().expect("Failed to parse grid");
 
@@ -194,7 +200,7 @@ mod tests {
         MXMXAXMASX";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part1(EXAMPLE_INPUT), "18");
+        assert_eq!(sol.part1(EXAMPLE_INPUT, false), "18");
     }
 
     #[test]
@@ -212,6 +218,6 @@ mod tests {
         MXMXAXMASX";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part2(EXAMPLE_INPUT), "9");
+        assert_eq!(sol.part2(EXAMPLE_INPUT, false), "9");
     }
 }

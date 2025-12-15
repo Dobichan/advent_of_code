@@ -32,7 +32,11 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 12345.to_string();
+        }
+
         let mut ret = 0;
 
         for bank in input.trim().lines() {
@@ -41,7 +45,10 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 123456789012345i64.to_string();
+        }
         let mut ret = 0;
         for bank in input.trim().lines() {
             ret += get_max_jolt(bank, 12);
@@ -62,7 +69,7 @@ mod tests {
                     818181911112111";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT);
+        let answer = sol.part1(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "357");
     }
@@ -102,7 +109,7 @@ mod tests {
                     818181911112111";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT);
+        let answer = sol.part2(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "3121910778619");
     }

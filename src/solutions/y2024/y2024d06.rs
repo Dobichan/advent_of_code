@@ -82,7 +82,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let mut world: Grid = input.parse().unwrap();
 
         let guard_pos = world
@@ -106,7 +109,10 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let start_grid: Grid = input.parse().unwrap();
 
         let mut ret = 0;
@@ -184,7 +190,7 @@ mod tests {
 
         let mut sol = Solution {};
 
-        assert_eq!(sol.part1(EXAMPLE_INPUT.trim()), "41");
+        assert_eq!(sol.part1(EXAMPLE_INPUT.trim(), false), "41");
     }
 
     #[test]
@@ -203,6 +209,6 @@ mod tests {
 
         let mut sol = Solution {};
 
-        assert_eq!(sol.part2(EXAMPLE_INPUT.trim()), "6");
+        assert_eq!(sol.part2(EXAMPLE_INPUT.trim(), false), "6");
     }
 }

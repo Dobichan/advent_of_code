@@ -104,7 +104,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let (rules, jobs) = parse(input);
 
         let mut ret = 0;
@@ -117,7 +120,10 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234.to_string();
+        }
         let (rules, jobs) = parse(input);
 
         let mut ret = 0;
@@ -170,7 +176,7 @@ mod tests {
         97,13,75,29,47";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part1(EXAMPLE_INPUT), "143")
+        assert_eq!(sol.part1(EXAMPLE_INPUT, false), "143")
     }
 
     #[test]
@@ -206,6 +212,6 @@ mod tests {
         97,13,75,29,47";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part2(EXAMPLE_INPUT), "123")
+        assert_eq!(sol.part2(EXAMPLE_INPUT, false), "123")
     }
 }

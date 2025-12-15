@@ -50,7 +50,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 123456.to_string();
+        }
         let (_, instructions) =
             many1(many_till(anychar, mul_instruction).map(|(_skip, instruction)| instruction))
                 .parse(input)
@@ -66,7 +69,10 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 123456.to_string();
+        }
         let (_, instructions) =
             many1(many_till(anychar, instruction).map(|(_skip, instruction)| instruction))
                 .parse(input)
@@ -103,7 +109,7 @@ mod tests {
         "#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT.trim());
+        let answer = sol.part1(EXAMPLE_INPUT.trim(), false);
         assert_eq!(answer, "161");
     }
 
@@ -114,7 +120,7 @@ mod tests {
         "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT.trim());
+        let answer = sol.part2(EXAMPLE_INPUT.trim(), false);
         assert_eq!(answer, "48");
     }
 }

@@ -1,5 +1,5 @@
 use crate::AoCSolution;
-use std::{fs::File, io::Write, path::Path, usize};
+use std::{fs::File, io::Write, path::Path};
 
 const YEAR: u16 = 2025;
 const DAY: u8 = 9;
@@ -20,7 +20,10 @@ impl AoCSolution for Solution {
         DAY
     }
 
-    fn part1(&mut self, input: &str) -> String {
+    fn part1(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234567890.to_string();
+        }
         self.points = Some(Vec::with_capacity(1000));
         let points = self.points.as_mut().unwrap();
 
@@ -57,7 +60,11 @@ impl AoCSolution for Solution {
         maks_area.to_string()
     }
 
-    fn part2(&mut self, input: &str) -> String {
+    fn part2(&mut self, input: &str, dryrun: bool) -> String {
+        if dryrun {
+            return 1234567890.to_string();
+        }
+
         if self.points.is_none() {
             self.points = Some(Vec::with_capacity(1000));
             let points = self.points.as_mut().unwrap();
@@ -244,7 +251,7 @@ mod tests {
         let mut sol = Solution {
             ..Default::default()
         };
-        let answer = sol.part1(&EXAMPLE_INPUT);
+        let answer = sol.part1(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "50");
     }
@@ -263,7 +270,7 @@ mod tests {
         let mut sol = Solution {
             ..Default::default()
         };
-        let answer = sol.part2(&EXAMPLE_INPUT);
+        let answer = sol.part2(&EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "");
     }
