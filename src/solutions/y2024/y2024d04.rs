@@ -72,7 +72,7 @@ fn check_xmas(grid: &Grid, dir: Direction, x: usize, y: usize) -> bool {
             }
 
             Direction::DownRight => {
-                if y < grid.height() - MAS.len() && x <= grid.width() - MAS.len() {
+                if y < grid.height() - MAS.len() && x < grid.width() - MAS.len() {
                     if grid[y + i + 1][x + i + 1] != *c {
                         return false;
                     }
