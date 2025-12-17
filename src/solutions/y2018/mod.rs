@@ -1,3 +1,5 @@
+use crate::AoCSolution;
+
 // pub mod y2018d01;
 // pub mod y2018d02;
 // pub mod y2018d03;
@@ -24,3 +26,41 @@
 // pub mod y2018d23;
 // pub mod y2018d24;
 // pub mod y2018d25;
+
+pub fn run(_input: &str, day: u8, _part: char, _dryrun: bool) {
+    let mut _solution: Box<dyn AoCSolution>;
+    match day {
+        // 1 => solution = Box::new(y2018d01::Solution {}),
+        // 2 => solution = Box::new(y2018d02::Solution {}),
+        // 3 => solution = Box::new(y2018d03::Solution {}),
+        // 4 => solution = Box::new(y2018d04::Solution {}),
+        // 5 => solution = Box::new(y2018d05::Solution {}),
+        // 6 => solution = Box::new(y2018d06::Solution {}),
+        // 7 => solution = Box::new(y2018d07::Solution {}),
+        // 8 => solution = Box::new(y2018d08::Solution {}),
+        // 9 => solution = Box::new(y2018d09::Solution {}),
+        // 10 => solution =Box::new( y2018d10::Solution {}),
+        // 11 => solution =Box::new( y2018d11::Solution {}),
+        // 12 => solution =Box::new( y2018d12::Solution {}),
+        // 13 => solution =Box::new( y2018d13::Solution {}),
+        // 14 => solution =Box::new( y2018d14::Solution {}),
+        // 15 => solution =Box::new( y2018d15::Solution {}),
+        // 16 => solution =Box::new( y2018d16::Solution {}),
+        // 17 => solution =Box::new( y2018d17::Solution {}),
+        // 18 => solution =Box::new( y2018d18::Solution {}),
+        // 19 => solution =Box::new( y2018d19::Solution {}),
+        // 20 => solution =Box::new( y2018d20::Solution {}),
+        // 21 => solution =Box::new( y2018d21::Solution {}),
+        // 22 => solution =Box::new( y2018d22::Solution {}),
+        // 23 => solution =Box::new( y2018d23::Solution {}),
+        // 24 => solution =Box::new( y2018d24::Solution {}),
+        // 25 => solution =Box::new( y2018d25::Solution {}),
+        _ => panic!("Illegal day {} for 2018", day),
+    }
+    // match part {
+    //     '1' => solution.run_part1(input, dryrun),
+    //     '2' => solution.run_part2(input, dryrun),
+    //     'a' => solution.run(input, dryrun),
+    //     _ => panic!("Illegal part option, use 1,2 or a"),
+    // }
+}
