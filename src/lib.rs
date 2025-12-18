@@ -1,5 +1,6 @@
 // My Library modules
 pub mod grid;
+pub mod iterators;
 pub mod parsing;
 pub mod solutions;
 
