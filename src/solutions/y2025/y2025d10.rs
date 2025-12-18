@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 use crate::{AoCSolution, iterators::GosperIterator};
 
 const YEAR: u16 = 2025;
@@ -10,9 +8,8 @@ pub struct Solution {}
 #[derive(Debug)]
 struct Machine {
     indicators: u32,
-    num_indicators: u32,
     buttons: Vec<u32>,
-    joltage_requirements: Vec<u16>,
+    _joltage_requirements: Vec<u16>,
 }
 
 impl Machine {
@@ -50,7 +47,6 @@ fn parse(line: &str) -> Machine {
             .enumerate()
             .map(|(i, c)| if c == '#' { 1u32 << i } else { 0 })
             .sum(),
-        num_indicators: (indicators.len() - 2) as u32,
         buttons: elements[1..elements.len() - 1] // Skip first and last - indicators and joltage
             .iter()
             .map(|btn| {
@@ -63,7 +59,7 @@ fn parse(line: &str) -> Machine {
                     .sum()
             })
             .collect(),
-        joltage_requirements: joltage[1..joltage.len() - 1] // skip '{' and '}' - first and last
+        _joltage_requirements: joltage[1..joltage.len() - 1] // skip '{' and '}' - first and last
             .split(',')
             .map(|jo| jo.parse::<u16>().unwrap())
             .collect(),
@@ -87,15 +83,14 @@ impl AoCSolution for Solution {
         // for t in test {
         //     println!("{:?}", t);
         // }
+        let lines: Vec<_> = input.trim().lines().collect();
 
-        let ret = input
-            .trim()
-            .lines()
+        lines
+            .iter()
             .map(|line| parse(line))
             .map(|machine| machine.get_min_btn_presses_leds())
             .sum::<u32>()
-            .to_string();
-        ret
+            .to_string()
     }
 
     fn part2(&mut self, _input: &str, dryrun: bool) -> String {
