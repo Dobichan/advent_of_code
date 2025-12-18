@@ -9,7 +9,7 @@ pub mod y2025d06;
 pub mod y2025d07;
 pub mod y2025d08;
 pub mod y2025d09;
-// pub mod y2025d10;
+pub mod y2025d10;
 // pub mod y2025d11;
 // pub mod y2025d12;
 
@@ -34,7 +34,7 @@ pub fn run(input: &str, day: u8, part: char, dryrun: bool) {
                 ..Default::default()
             })
         }
-        // 10 => solution =Box::new( y2025d10::Solution {}),
+        10 => solution = Box::new(y2025d10::Solution {}),
         // 11 => solution =Box::new( y2025d11::Solution {}),
         // 12 => solution =Box::new( y2025d12::Solution {}),
         _ => panic!("Illegal day {} for 2025", day),
