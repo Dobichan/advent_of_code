@@ -11,7 +11,7 @@ pub fn get_max_jolt(bank: &str, position: usize) -> i64 {
     let available_chars = &bank[0..bank.len() - (position - 1)];
 
     for (i, ch) in available_chars.chars().enumerate() {
-        let digit: i64 = (ch as u8 - '0' as u8) as i64;
+        let digit: i64 = (ch as u8 - b'0') as i64;
         if digit > max {
             max = digit;
             max_index = i;
@@ -69,7 +69,7 @@ mod tests {
                     818181911112111";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "357");
     }
@@ -109,7 +109,7 @@ mod tests {
                     818181911112111";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "3121910778619");
     }

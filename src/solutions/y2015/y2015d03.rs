@@ -30,9 +30,7 @@ impl AoCSolution for Solution {
                 '<' => (pos.0 - 1, pos.1),
                 _ => panic!("Illegal character in input!!!!"),
             };
-            if !houses.contains_key(&pos) {
-                houses.insert(pos, 1);
-            }
+            houses.entry(pos).or_insert(1);
         }
         houses.len().to_string()
     }
@@ -77,9 +75,7 @@ impl AoCSolution for Solution {
                 }
                 _ => panic!("Illegal character in input!!!!"),
             };
-            if !houses.contains_key(&new_pos) {
-                houses.insert(new_pos, 1);
-            }
+            houses.entry(new_pos).or_insert(1);
             if i % 2 == 0 {
                 santa_pos = new_pos;
             } else {

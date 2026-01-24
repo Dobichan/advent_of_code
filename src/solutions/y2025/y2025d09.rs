@@ -44,7 +44,7 @@ fn get_points(input: &str) -> Vec<Point> {
         .collect()
 }
 
-fn get_rectangles(points: &Vec<Point>) -> Vec<Rectangle> {
+fn get_rectangles(points: &[Point]) -> Vec<Rectangle> {
     let mut rectangles = Vec::with_capacity(130000);
 
     for i in 0..points.len() - 1 {
@@ -89,7 +89,7 @@ fn points_inside(rect: &Rectangle, points: &Vec<Point>) -> bool {
     false
 }
 
-fn horizontals_crossing(rect: &Rectangle, horizontals: &Vec<Line>) -> bool {
+fn horizontals_crossing(rect: &Rectangle, horizontals: &[Line]) -> bool {
     // println!("horizontals: {:?}", rect);
     let mut crossing = horizontals.iter().filter(|l| {
         l.common > rect.top_left.y
@@ -105,7 +105,7 @@ fn horizontals_crossing(rect: &Rectangle, horizontals: &Vec<Line>) -> bool {
     false
 }
 
-fn verticals_crossing(rect: &Rectangle, verticals: &Vec<Line>) -> bool {
+fn verticals_crossing(rect: &Rectangle, verticals: &[Line]) -> bool {
     // println!("Verticals: {:?}", rect);
     let mut crossing = verticals.iter().filter(|l| {
         l.common > rect.top_left.x
@@ -166,7 +166,7 @@ impl AoCSolution for Solution {
 
         let points = self.points.as_ref().unwrap();
 
-        let rectangles = get_rectangles(&points);
+        let rectangles = get_rectangles(points);
         let mut horizontal = Vec::with_capacity(points.len());
         let mut vertical = Vec::with_capacity(points.len());
 
@@ -188,11 +188,11 @@ impl AoCSolution for Solution {
         vertical.sort();
         horizontal.sort();
 
-        let rects_no_points_inside = rectangles.iter().filter(|r| !points_inside(&r, points));
+        let rects_no_points_inside = rectangles.iter().filter(|r| !points_inside(r, points));
         let rects_no_horr_crossing =
-            rects_no_points_inside.filter(|r| !horizontals_crossing(&r, &horizontal));
+            rects_no_points_inside.filter(|r| !horizontals_crossing(r, &horizontal));
         let mut rects_no_vert_crossing =
-            rects_no_horr_crossing.filter(|r| !verticals_crossing(&r, &vertical));
+            rects_no_horr_crossing.filter(|r| !verticals_crossing(r, &vertical));
 
         rects_no_vert_crossing.next().unwrap().area.to_string()
     }
@@ -215,7 +215,7 @@ mod tests {
         let mut sol = Solution {
             ..Default::default()
         };
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "50");
     }
@@ -234,7 +234,7 @@ mod tests {
         let mut sol = Solution {
             ..Default::default()
         };
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "24");
     }

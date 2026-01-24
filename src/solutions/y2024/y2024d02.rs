@@ -4,7 +4,7 @@ use crate::{
 };
 
 const YEAR: u16 = 2024;
-const DAY: u8 = 02;
+const DAY: u8 = 2;
 pub struct Solution {}
 
 fn is_valid_pair(a: &i64, b: &i64, ascending: &bool) -> bool {
@@ -12,7 +12,7 @@ fn is_valid_pair(a: &i64, b: &i64, ascending: &bool) -> bool {
     if *ascending && diff > 0 && diff <= 3 {
         return true;
     }
-    if !*ascending && diff < 0 && diff >= -3 {
+    if !*ascending && (-3..0).contains(&diff) {
         return true;
     }
     false
@@ -98,7 +98,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "2");
     }
@@ -115,7 +115,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "4");
     }

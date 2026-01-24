@@ -34,7 +34,7 @@ pub fn run(input: &str, day: u8, part: char, dryrun: bool) {
         2 => solution = Box::new(y2015d02::Solution {}),
         3 => solution = Box::new(y2015d03::Solution {}),
         4 => solution = Box::new(y2015d04::Solution {}),
-        5 => solution = Box::new(y2015d05::Solution::new()),
+        5 => solution = Box::new(y2015d05::Solution::default()),
         // 6 =>solution = Box::new(y2015d06::Solution{}),
         // 7 =>solution = Box::new(y2015d07::Solution{}),
         // 8 =>solution = Box::new(y2015d08::Solution{}),

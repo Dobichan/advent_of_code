@@ -116,16 +116,16 @@ fn check_xmas(grid: &Grid, dir: Direction, x: usize, y: usize) -> bool {
 }
 
 fn check_mas(grid: &Grid, x: usize, y: usize) -> bool {
-    if x > 0 && x < grid.width() - 1 && y > 0 && y < grid.height() - 1 {
-        if (grid[y - 1][x - 1] == 'M' && grid[y + 1][x + 1] == 'S')
-            || (grid[y - 1][x - 1] == 'S' && grid[y + 1][x + 1] == 'M')
-        {
-            if (grid[y - 1][x + 1] == 'M' && grid[y + 1][x - 1] == 'S')
-                || (grid[y - 1][x + 1] == 'S' && grid[y + 1][x - 1] == 'M')
-            {
-                return true;
-            }
-        }
+    if x > 0
+        && x < grid.width() - 1
+        && y > 0
+        && y < grid.height() - 1
+        && ((grid[y - 1][x - 1] == 'M' && grid[y + 1][x + 1] == 'S')
+            || (grid[y - 1][x - 1] == 'S' && grid[y + 1][x + 1] == 'M'))
+        && ((grid[y - 1][x + 1] == 'M' && grid[y + 1][x - 1] == 'S')
+            || (grid[y - 1][x + 1] == 'S' && grid[y + 1][x - 1] == 'M'))
+    {
+        return true;
     }
     false
 }
@@ -170,10 +170,8 @@ impl AoCSolution for Solution {
 
         for y in 0..grid.height() {
             for x in 0..grid.width() {
-                if grid[y][x] == 'A' {
-                    if check_mas(&grid, x, y) {
-                        ret += 1;
-                    }
+                if grid[y][x] == 'A' && check_mas(&grid, x, y) {
+                    ret += 1;
                 }
             }
         }

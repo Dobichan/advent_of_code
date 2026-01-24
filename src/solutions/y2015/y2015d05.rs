@@ -3,6 +3,7 @@ use fancy_regex::Regex;
 
 const YEAR: u16 = 2015;
 const DAY: u8 = 5;
+
 pub struct Solution {
     vowels_check: Regex,
     repeat_character: Regex,
@@ -11,27 +12,34 @@ pub struct Solution {
     spaced_double_letter: Regex,
 }
 
-impl Solution {
-    pub fn new() -> Self {
-        Solution {
-            vowels_check: Regex::new("([aeiou])").unwrap(),
-            repeat_character: Regex::new("(.)\\1").unwrap(),
-            illegal_group: Regex::new("(ab|cd|pq|xy)").unwrap(),
-            repeating_pair: Regex::new("(.)(.).*(\\1\\2)").unwrap(),
-            spaced_double_letter: Regex::new("(.).(\\1)").unwrap(),
+impl Default for Solution {
+    fn default() -> Self {
+        Self {
+            vowels_check: Regex::new(r"([aeiou])").unwrap(),
+            repeat_character: Regex::new(r"(.)\1").unwrap(),
+            illegal_group: Regex::new(r"(ab|cd|pq|xy)").unwrap(),
+            repeating_pair: Regex::new(r"(.)(.).*(\1\2)").unwrap(),
+            spaced_double_letter: Regex::new(r"(.).(\1)").unwrap(),
         }
     }
+}
+
+impl Solution {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
     fn is_nice_part1(&self, line: &str) -> bool {
         let vowels: Vec<_> = self.vowels_check.captures_iter(line.trim()).collect();
         if vowels.len() < 3 {
             return false;
         }
         let repeated_chars: Vec<_> = self.repeat_character.captures_iter(line.trim()).collect();
-        if repeated_chars.len() < 1 {
+        if repeated_chars.is_empty() {
             return false;
         }
         let illegal_groups: Vec<_> = self.illegal_group.captures_iter(line.trim()).collect();
-        if illegal_groups.len() > 0 {
+        if !illegal_groups.is_empty() {
             return false;
         }
 
@@ -40,7 +48,7 @@ impl Solution {
 
     fn is_nice_part2(&self, line: &str) -> bool {
         let repeating_pairs: Vec<_> = self.repeating_pair.captures_iter(line.trim()).collect();
-        if repeating_pairs.len() < 1 {
+        if repeating_pairs.is_empty() {
             return false;
         }
 
@@ -48,7 +56,7 @@ impl Solution {
             .spaced_double_letter
             .captures_iter(line.trim())
             .collect();
-        if double_letters.len() < 1 {
+        if double_letters.is_empty() {
             return false;
         }
         true
@@ -130,7 +138,7 @@ mod tests {
             ieodomkazucvgmuy
             "#;
 
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "2");
     }

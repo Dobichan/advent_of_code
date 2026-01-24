@@ -1,10 +1,10 @@
 use crate::{AoCSolution, parsing::numbers_to_pair};
 
 const YEAR: u16 = 2024;
-const DAY: u8 = 01;
+const DAY: u8 = 1;
 pub struct Solution {}
 
-fn input_to_vectors(lines: &Vec<String>) -> (Vec<i64>, Vec<i64>) {
+fn input_to_vectors(lines: &[String]) -> (Vec<i64>, Vec<i64>) {
     lines.iter().map(|line| numbers_to_pair(line)).unzip()
 }
 
@@ -73,7 +73,7 @@ mod tests {
         assert_eq!(seconds, [4, 3, 5, 3, 9, 3]);
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "11");
     }
@@ -90,7 +90,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "31");
     }

@@ -1,5 +1,3 @@
-use std::usize;
-
 use crate::{AoCSolution, grid::Grid};
 
 const YEAR: u16 = 2025;
@@ -23,15 +21,11 @@ pub fn removeable_paper_roll(grid: &Grid, row: usize, col: usize) -> bool {
                 others += 1;
             }
         }
-        if col > 0 {
-            if grid[row][col - 1] == '@' {
-                others += 1;
-            }
+        if col > 0 && grid[row][col - 1] == '@' {
+            others += 1;
         }
-        if col < grid.width() - 1 {
-            if grid[row][col + 1] == '@' {
-                others += 1;
-            }
+        if col < grid.width() - 1 && grid[row][col + 1] == '@' {
+            others += 1;
         }
         if row < grid.height() - 1 {
             if col > 0 && grid[row + 1][col - 1] == '@' {
@@ -129,7 +123,7 @@ mod tests {
                 @.@.@@@.@.";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "13");
     }
@@ -148,7 +142,7 @@ mod tests {
                 @.@.@@@.@.";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "43");
     }

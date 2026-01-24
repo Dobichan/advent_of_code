@@ -1,8 +1,6 @@
-use std::collections::HashMap;
-
-use multimap::MultiMap;
-
 use crate::AoCSolution;
+use multimap::MultiMap;
+use std::collections::HashMap;
 
 const YEAR: u16 = 2024;
 const DAY: u8 = 8;
@@ -151,7 +149,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT.trim(), false);
+        let answer = sol.part1(EXAMPLE_INPUT.trim(), false);
 
         assert_eq!(answer, "14");
     }
@@ -174,7 +172,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT.trim(), false);
+        let answer = sol.part2(EXAMPLE_INPUT.trim(), false);
 
         assert_eq!(answer, "34");
     }

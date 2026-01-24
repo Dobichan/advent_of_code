@@ -21,13 +21,7 @@ impl PrintJob {
                 let pages_before: &[i64] = &self.pages.as_slice()[0..i];
                 if pages_before
                     .iter()
-                    .filter(|p| {
-                        if this_page_rule.contains(p) {
-                            true
-                        } else {
-                            false
-                        }
-                    })
+                    .filter(|p| this_page_rule.contains(p))
                     .count()
                     > 0
                 {
@@ -48,7 +42,7 @@ impl PrintJob {
         for page in self.pages.iter() {
             let mut inserted = false;
 
-            if let Some(this_page_rules) = rules.get_vec(&page) {
+            if let Some(this_page_rules) = rules.get_vec(page) {
                 for (i, new_page) in reordered.iter().enumerate() {
                     if this_page_rules.contains(new_page) {
                         reordered.insert(i, *page);

@@ -69,19 +69,19 @@ mod tests {
     fn test_part1() {
         const INPUT1: &str = r"2x3x4";
         let mut sol = Solution {};
-        assert_eq!(sol.part1(&INPUT1, false), "58");
+        assert_eq!(sol.part1(INPUT1, false), "58");
 
         const INPUT2: &str = r"1x1x10";
-        assert_eq!(sol.part1(&INPUT2, false), "43");
+        assert_eq!(sol.part1(INPUT2, false), "43");
     }
 
     #[test]
     fn test_part2() {
         const INPUT1: &str = r"2x3x4";
         let mut sol = Solution {};
-        assert_eq!(sol.part2(&INPUT1, false), "34");
+        assert_eq!(sol.part2(INPUT1, false), "34");
 
         const INPUT2: &str = r"1x1x10";
-        assert_eq!(sol.part2(&INPUT2, false), "14");
+        assert_eq!(sol.part2(INPUT2, false), "14");
     }
 }

@@ -1,5 +1,5 @@
 use crate::{AoCSolution, grid::Grid};
-use std::{collections::HashMap, usize};
+use std::collections::HashMap;
 
 const YEAR: u16 = 2024;
 const DAY: u8 = 6;
@@ -31,29 +31,28 @@ fn move_guard(world: &mut Grid, guard: &mut Guard) {
     guard.positions.insert(pos_dir, 1);
 
     let mut new_pos = guard.position;
-    let new_direction: Direction;
-
-    match guard.direction {
+    let new_direction: Direction = match guard.direction {
         Direction::North => {
-            new_pos.1 = new_pos.1 - 1;
-            new_direction = Direction::East;
+            new_pos.1 -= 1;
+            Direction::East
         }
 
         Direction::East => {
-            new_pos.0 = new_pos.0 + 1;
-            new_direction = Direction::South;
+            new_pos.0 += 1;
+            Direction::South
         }
 
         Direction::South => {
-            new_pos.1 = new_pos.1 + 1;
-            new_direction = Direction::West;
+            new_pos.1 += 1;
+            Direction::West
         }
 
         Direction::West => {
-            new_pos.0 = new_pos.0 - 1;
-            new_direction = Direction::North;
+            new_pos.0 -= 1;
+            Direction::North
         }
-    }
+    };
+
     if world.inside((new_pos.0 as usize, new_pos.1 as usize)) {
         if world[new_pos.1 as usize][new_pos.0 as usize] == '#' {
             // Need to rotate

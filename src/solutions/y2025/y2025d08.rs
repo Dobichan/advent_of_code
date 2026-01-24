@@ -104,8 +104,7 @@ impl AoCSolution for Solution {
             let mut a_index = None;
             let mut b_index = None;
 
-            for circuit_index in 0..circuits.len() {
-                let circuit = &circuits[circuit_index];
+            for (circuit_index, circuit) in circuits.iter().enumerate() {
                 // println!("{circuit_index}-{:?}  ", circuit);
                 if circuit.contains(&a) {
                     if a_index.is_some() {
@@ -127,9 +126,9 @@ impl AoCSolution for Solution {
             } else if a_index.is_some() && b_index.is_none() {
                 // println!("{b} is added to {:?}", a_index);
                 circuits[a_index.unwrap()].push(b);
-            } else if a_index.is_none() && b_index.is_some() {
+            } else if let (None, Some(b_index)) = (a_index, b_index) {
                 // println!("{a} is added to {:?}", b_index);
-                circuits[b_index.unwrap()].push(a);
+                circuits[b_index].push(a);
             } else if a_index.unwrap() != b_index.unwrap() {
                 // Merge a and b
                 let a_index = a_index.unwrap();
@@ -187,8 +186,7 @@ impl AoCSolution for Solution {
             let mut a_index = None;
             let mut b_index = None;
 
-            for circuit_index in 0..circuits.len() {
-                let circuit = &circuits[circuit_index];
+            for (circuit_index, circuit) in circuits.iter().enumerate() {
                 // println!("{circuit_index}-{:?}  ", circuit);
                 if circuit.contains(&a) {
                     if a_index.is_some() {
@@ -212,9 +210,9 @@ impl AoCSolution for Solution {
                 // println!("{b} is added to {:?}", a_index);
                 circuits[a_index.unwrap()].push(b);
                 unused_boxes -= 1;
-            } else if a_index.is_none() && b_index.is_some() {
+            } else if let (None, Some(b_index)) = (a_index, b_index) {
                 // println!("{a} is added to {:?}", b_index);
-                circuits[b_index.unwrap()].push(a);
+                circuits[b_index].push(a);
                 unused_boxes -= 1;
             } else if a_index.unwrap() != b_index.unwrap() {
                 // Merge a and b
@@ -282,7 +280,7 @@ mod tests {
             num_operations_part1: 10,
             ..Default::default()
         };
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "40");
     }
@@ -314,7 +312,7 @@ mod tests {
             num_operations_part1: 10,
             ..Default::default()
         };
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "25272");
     }

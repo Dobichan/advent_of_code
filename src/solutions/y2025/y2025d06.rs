@@ -59,8 +59,8 @@ impl AoCSolution for Solution {
 
         let inputs: Vec<_> = input.trim().lines().collect();
 
-        for i in 0..inputs.len() - 1 {
-            let digits: Vec<_> = inputs[i]
+        for input in &inputs[0..inputs.len() - 1] {
+            let digits: Vec<_> = input
                 .split(' ')
                 .filter(|e| !e.is_empty())
                 .map(|d| d.parse::<u64>().unwrap())
@@ -83,8 +83,8 @@ impl AoCSolution for Solution {
                 numbers: Vec::new(),
                 operation: operators[i],
             });
-            for j in 0..digit_rows.len() {
-                problems[i].numbers.push(digit_rows[j][i]);
+            for row in &digit_rows {
+                problems[i].numbers.push(row[i]);
             }
         }
 
@@ -126,20 +126,19 @@ impl AoCSolution for Solution {
         let mut problem = MathProblem::new();
         let mut next_operator = operators.iter();
         for i in 0..line_lenght {
-            let mut digits = String::new();
+            let digits: String = char_rows.iter().map(|row| row[i]).collect();
+            let trimmed = digits.trim();
 
-            for j in 0..digit_rows {
-                digits.push(char_rows[j][i]);
-            }
-            if digits.trim().len() != 0 {
-                problem.numbers.push(digits.trim().parse::<u64>().unwrap());
+            if !trimmed.is_empty() {
+                let val = trimmed.parse::<u64>().expect("Failed to parse number");
+                problem.numbers.push(val);
             } else {
-                problem.operation = *next_operator.next().unwrap();
+                problem.operation = *next_operator.next().expect("No more operators left");
                 problems.push(problem);
                 problem = MathProblem::new();
             }
         }
-        if problem.numbers.len() > 0 {
+        if !problem.numbers.is_empty() {
             problem.operation = *next_operator.next().unwrap();
             problems.push(problem);
         }
@@ -164,7 +163,7 @@ mod tests {
                 *   +   *   +  ";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "4277556");
     }
@@ -175,7 +174,7 @@ mod tests {
             "123 328  51 64 \n 45 64  387 23 \n  6 98  215 314\n*   +   *   +  ";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "3263827");
     }

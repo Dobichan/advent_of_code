@@ -18,13 +18,11 @@ impl ProductIdRange {
         let low: u64 = lower.parse().unwrap();
         let high: u64 = upper.parse().unwrap();
         let start_num_digits = lower.len();
-        let prefix: u64;
-
-        if start_num_digits % 2 == 0 {
-            prefix = lower[0..start_num_digits / 2].parse().unwrap();
+        let prefix: u64 = if start_num_digits.is_multiple_of(2) {
+            lower[0..start_num_digits / 2].parse().unwrap()
         } else {
-            prefix = 10u64.pow(start_num_digits as u32 / 2);
-        }
+            10u64.pow(start_num_digits as u32 / 2)
+        };
 
         ProductIdRange {
             lower: low,
@@ -164,7 +162,7 @@ mod tests {
         const INPUT: &str = "11-22";
 
         assert_eq!(
-            parse(&INPUT),
+            parse(INPUT),
             [ProductIdRange {
                 lower: 11,
                 upper: 22,
@@ -178,7 +176,7 @@ mod tests {
         const INPUT: &str = "11-22,95-115";
 
         assert_eq!(
-            parse(&INPUT),
+            parse(INPUT),
             [
                 ProductIdRange {
                     lower: 11,
@@ -199,7 +197,7 @@ mod tests {
         const INPUT: &str = "11-22,95-115,123-156";
 
         assert_eq!(
-            parse(&INPUT),
+            parse(INPUT),
             [
                 ProductIdRange {
                     lower: 11,
@@ -274,7 +272,7 @@ mod tests {
                                      2121212118-2121212124";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "1227775554");
     }
@@ -332,7 +330,7 @@ mod tests {
                                      2121212118-2121212124";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "4174379265");
     }

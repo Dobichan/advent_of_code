@@ -141,7 +141,7 @@ mod tests {
             9111119"#;
 
         assert_eq!(
-            parse(&TEST_GRID),
+            parse(TEST_GRID),
             [
                 ['9', '9', '9', '0', '9', '9', '9'],
                 ['9', '9', '9', '1', '9', '9', '9'],
@@ -165,7 +165,7 @@ mod tests {
             9111119"#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "2");
     }
@@ -182,7 +182,7 @@ mod tests {
             9111119"#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "2");
     }

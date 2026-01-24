@@ -81,7 +81,7 @@ fn parse(input: &str, condensed: bool) -> Vec<Block> {
     ret
 }
 
-fn defragment(disk: &Vec<Block>) -> Vec<Block> {
+fn defragment(disk: &[Block]) -> Vec<Block> {
     let mut ret = Vec::with_capacity(50 * 1024 * 1024);
     let mut start: usize = 0;
     let mut end = disk.len() - 1;
@@ -110,16 +110,16 @@ fn defragment(disk: &Vec<Block>) -> Vec<Block> {
 fn defragment_type2(disk: &mut Vec<Block>) -> Vec<Block> {
     let mut ret = Vec::with_capacity(50 * 1024 * 1024);
 
-    for i in 0..disk.len() {
-        match &disk[i] {
+    for block in &mut *disk {
+        match block {
             Block::File { f } => {
                 for _ in 0..f.length {
-                    ret.push(disk[i].clone());
+                    ret.push(block.clone());
                 }
             }
             Block::Free { f } => {
                 for _ in 0..f.length {
-                    ret.push(disk[i].clone());
+                    ret.push(block.clone());
                 }
             }
         }
@@ -137,28 +137,28 @@ fn defragment_type2(disk: &mut Vec<Block>) -> Vec<Block> {
 
         if let Block::File { f: mut lf } = last_file {
             // Iterate over free spaces that matches
-            for i in 0..disk.len() {
-                if let Block::Free { mut f } = disk[i].clone() {
-                    if f.length >= lf.length {
-                        for j in 0..lf.length {
-                            ret[lf.start + j] = Block::Free {
-                                f: FreeInfo {
-                                    start: lf.start,
-                                    length: lf.length,
-                                },
-                            };
-                        }
-
-                        lf.start = f.start;
-                        for j in 0..lf.length {
-                            ret[f.start + j] = Block::File { f: lf.clone() };
-                        }
-                        f.length = f.length - lf.length;
-                        f.start += lf.length;
-
-                        disk[i] = Block::Free { f };
-                        break;
+            for block in &mut *disk {
+                if let Block::Free { mut f } = block.clone()
+                    && f.length >= lf.length
+                {
+                    for j in 0..lf.length {
+                        ret[lf.start + j] = Block::Free {
+                            f: FreeInfo {
+                                start: lf.start,
+                                length: lf.length,
+                            },
+                        };
                     }
+
+                    lf.start = f.start;
+                    for j in 0..lf.length {
+                        ret[f.start + j] = Block::File { f: lf.clone() };
+                    }
+                    f.length -= lf.length;
+                    f.start += lf.length;
+
+                    *block = Block::Free { f };
+                    break;
                 }
             }
         }
@@ -174,7 +174,7 @@ fn defragment_type2(disk: &mut Vec<Block>) -> Vec<Block> {
     ret
 }
 
-fn calculate_checksum(disk: &Vec<Block>) -> u64 {
+fn calculate_checksum(disk: &[Block]) -> u64 {
     let mut ret = 0;
     for (index, block) in disk.iter().enumerate() {
         ret += index as u64
@@ -226,7 +226,7 @@ mod tests {
         const EXAMPLE_INPUT: &str = "12345";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "60");
     }
@@ -236,7 +236,7 @@ mod tests {
         const EXAMPLE_INPUT: &str = "2333133121414131402";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "1928");
     }
@@ -246,7 +246,7 @@ mod tests {
         const EXAMPLE_INPUT: &str = "2333133121414131402";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "2858");
     }

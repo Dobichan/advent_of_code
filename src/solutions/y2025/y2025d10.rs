@@ -24,7 +24,7 @@ impl Machine {
             for i in 0..num_buttons {
                 // println!("{i}");
                 if (button_mask & 1u32 << i) != 0 {
-                    res = res ^ self.buttons[i as usize];
+                    res ^= self.buttons[i];
                 }
             }
             if res == self.indicators {
@@ -112,7 +112,7 @@ mod tests {
                 [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "7");
     }
@@ -123,7 +123,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "");
     }

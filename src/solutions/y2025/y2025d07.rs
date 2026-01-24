@@ -30,7 +30,7 @@ pub fn process_timelines(
         visited.insert((row, col), ret);
         return ret;
     }
-    return process_timelines(grid, visited, row + 1, col);
+    process_timelines(grid, visited, row + 1, col)
 }
 
 pub fn process_beams(grid: &mut Grid, row: usize, beam_col: usize) {
@@ -89,7 +89,7 @@ impl AoCSolution for Solution {
         if dryrun {
             return 123456789012134i64.to_string();
         }
-        let mut grid: Grid = input.trim().parse().expect("Illegal input grid");
+        let grid: Grid = input.trim().parse().expect("Illegal input grid");
         let start_col = grid[0]
             .iter()
             .enumerate()
@@ -99,7 +99,7 @@ impl AoCSolution for Solution {
 
         let mut visited = HashMap::with_capacity(100000);
 
-        process_timelines(&mut grid, &mut visited, 1, start_col).to_string()
+        process_timelines(&grid, &mut visited, 1, start_col).to_string()
     }
 }
 
@@ -128,7 +128,7 @@ mod tests {
               ...............";
 
         let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "21");
     }
@@ -154,7 +154,7 @@ mod tests {
               ...............";
 
         let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT, false);
 
         assert_eq!(answer, "40");
     }
