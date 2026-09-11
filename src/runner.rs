@@ -35,22 +35,33 @@ impl Part {
     }
 }
 
-pub fn run(solution: &mut dyn AoCSolution, input: &str, part: Part, dryrun: bool) {
+pub fn run(
+    solution: &mut dyn AoCSolution,
+    year: u16,
+    day: u8,
+    input: &str,
+    part: Part,
+    dryrun: bool,
+) {
     let suffix = if dryrun { " dry-run" } else { "" };
+    println!("-- Advent of Code {year} day {day}{suffix}");
 
-    println!(
-        "-- Advent of Code {} day {}{suffix}",
-        solution.year(),
-        solution.day(),
-    );
+    if dryrun {
+        println!(
+            "Input: {} bytes, {} lines",
+            input.len(),
+            input.lines().count()
+        );
+        return;
+    }
 
     if part.is_part1() {
-        let (answer, elapsed) = timed(|| solution.part1(input, dryrun));
+        let (answer, elapsed) = timed(|| solution.part1(input));
         report(1, &answer, elapsed);
     }
 
     if part.is_part2() {
-        let (answer, elapsed) = timed(|| solution.part2(input, dryrun));
+        let (answer, elapsed) = timed(|| solution.part2(input));
         report(2, &answer, elapsed);
     }
 }

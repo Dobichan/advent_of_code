@@ -2,8 +2,6 @@ use crate::AoCSolution;
 use multimap::MultiMap;
 use std::collections::HashMap;
 
-const YEAR: u16 = 2024;
-const DAY: u8 = 8;
 pub struct Solution {}
 
 fn parse(input: &str) -> (MultiMap<char, (i32, i32)>, (i32, i32)) {
@@ -24,17 +22,7 @@ fn parse(input: &str) -> (MultiMap<char, (i32, i32)>, (i32, i32)) {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let (grid, (width, height)) = parse(input);
         let mut result = HashMap::new();
 
@@ -75,10 +63,7 @@ impl AoCSolution for Solution {
         result.keys().count().to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let (grid, (width, height)) = parse(input);
         let mut result = HashMap::new();
 
@@ -149,7 +134,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT.trim(), false);
+        let answer = sol.part1(EXAMPLE_INPUT.trim());
 
         assert_eq!(answer, "14");
     }
@@ -172,7 +157,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT.trim(), false);
+        let answer = sol.part2(EXAMPLE_INPUT.trim());
 
         assert_eq!(answer, "34");
     }

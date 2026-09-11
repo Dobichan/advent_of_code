@@ -1,9 +1,6 @@
 use crate::AoCSolution;
 use fancy_regex::Regex;
 
-const YEAR: u16 = 2015;
-const DAY: u8 = 5;
-
 pub struct Solution {
     vowels_check: Regex,
     repeat_character: Regex,
@@ -64,17 +61,7 @@ impl Solution {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return input.lines().count().to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         input
             .trim()
             .lines()
@@ -84,10 +71,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return input.lines().count().to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         input
             .trim()
             .lines()
@@ -119,7 +103,7 @@ mod tests {
             haegwjzuvuyypxyu
             dvszwmarrgswjxmb
             "#;
-        assert_eq!(sol.part1(EXAMPLE_INPUT, false), "2");
+        assert_eq!(sol.part1(EXAMPLE_INPUT), "2");
     }
 
     #[test]
@@ -138,7 +122,7 @@ mod tests {
             ieodomkazucvgmuy
             "#;
 
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "2");
     }

@@ -6,18 +6,7 @@ const DAY: u8 = 3;
 pub struct Solution {}
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return input.chars().count().to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut houses: HashMap<(i64, i64), i64> = HashMap::new();
         let mut pos = (0, 0);
         houses.insert(pos, 1);
@@ -34,10 +23,7 @@ impl AoCSolution for Solution {
         }
         houses.len().to_string()
     }
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return input.chars().count().to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let mut houses: HashMap<(i64, i64), i64> = HashMap::new();
         let mut santa_pos = (0, 0);
         let mut robo_santa_pos = (0, 0);
@@ -95,13 +81,13 @@ mod tests {
         let mut sol = Solution {};
 
         const INPUT1: &str = ">";
-        assert_eq!(sol.part1(INPUT1, false), "2");
+        assert_eq!(sol.part1(INPUT1), "2");
 
         const INPUT2: &str = "^>v<";
-        assert_eq!(sol.part1(INPUT2, false), "4");
+        assert_eq!(sol.part1(INPUT2), "4");
 
         const INPUT3: &str = "^v^v^v^v^v";
-        assert_eq!(sol.part1(INPUT3, false), "2");
+        assert_eq!(sol.part1(INPUT3), "2");
     }
 
     #[test]
@@ -109,12 +95,12 @@ mod tests {
         let mut sol = Solution {};
 
         const INPUT1: &str = "^v";
-        assert_eq!(sol.part2(INPUT1, false), "3");
+        assert_eq!(sol.part2(INPUT1), "3");
 
         const INPUT2: &str = "^>v<";
-        assert_eq!(sol.part2(INPUT2, false), "3");
+        assert_eq!(sol.part2(INPUT2), "3");
 
         const INPUT3: &str = "^v^v^v^v^v";
-        assert_eq!(sol.part2(INPUT3, false), "11");
+        assert_eq!(sol.part2(INPUT3), "11");
     }
 }

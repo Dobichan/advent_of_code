@@ -1,8 +1,5 @@
 use crate::{AoCSolution, iterators::GosperIterator};
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 10;
-
 pub struct Solution {}
 
 #[derive(Debug)]
@@ -67,18 +64,7 @@ fn parse(line: &str) -> Machine {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890.to_string();
-        }
-
+    fn part1(&mut self, input: &str) -> String {
         // let test: Vec<_> = input.trim().lines().map(|line| parse(line)).collect();
         // for t in test {
         //     println!("{:?}", t);
@@ -93,10 +79,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&mut self, _input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890.to_string();
-        }
+    fn part2(&mut self, _input: &str) -> String {
         0.to_string()
     }
 }
@@ -112,7 +95,7 @@ mod tests {
                 [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "7");
     }
@@ -123,7 +106,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "");
     }

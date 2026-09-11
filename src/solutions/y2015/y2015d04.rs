@@ -7,18 +7,7 @@ const DAY: u8 = 4;
 pub struct Solution {}
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123456767890i64.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut done = false;
         let mut append = 0;
 
@@ -35,10 +24,7 @@ impl AoCSolution for Solution {
         append.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 12345356246i64.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let mut done = false;
         let mut append = 0;
 
@@ -64,7 +50,7 @@ mod tests {
     fn test_part1() {
         let mut sol = Solution {};
         const INPUT1: &str = "abcdef";
-        assert_eq!(sol.part1(INPUT1, false), "609043");
+        assert_eq!(sol.part1(INPUT1), "609043");
     }
 
     #[test]

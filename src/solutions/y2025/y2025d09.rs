@@ -2,9 +2,6 @@ use itertools::Itertools;
 
 use crate::AoCSolution;
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 9;
-
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) struct Point {
     x: usize,
@@ -122,17 +119,7 @@ fn verticals_crossing(rect: &Rectangle, verticals: &[Line]) -> bool {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut maks_area = 0;
         let points = get_points(input);
 
@@ -155,11 +142,7 @@ impl AoCSolution for Solution {
         maks_area.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890.to_string();
-        }
-
+    fn part2(&mut self, input: &str) -> String {
         if self.points.is_none() {
             self.points = Some(get_points(input));
         }
@@ -215,7 +198,7 @@ mod tests {
         let mut sol = Solution {
             ..Default::default()
         };
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "50");
     }
@@ -234,7 +217,7 @@ mod tests {
         let mut sol = Solution {
             ..Default::default()
         };
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "24");
     }

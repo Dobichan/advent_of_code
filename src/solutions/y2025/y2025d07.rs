@@ -2,9 +2,6 @@ use std::collections::HashMap;
 
 use crate::{AoCSolution, grid::Grid};
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 7;
-
 pub struct Solution {}
 
 pub fn process_timelines(
@@ -53,17 +50,7 @@ pub fn process_beams(grid: &mut Grid, row: usize, beam_col: usize) {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut grid: Grid = input.trim().parse().expect("Illegal input grid");
         let start_col = grid[0]
             .iter()
@@ -85,10 +72,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123456789012134i64.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let grid: Grid = input.trim().parse().expect("Illegal input grid");
         let start_col = grid[0]
             .iter()
@@ -128,7 +112,7 @@ mod tests {
               ...............";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "21");
     }
@@ -154,7 +138,7 @@ mod tests {
               ...............";
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "40");
     }

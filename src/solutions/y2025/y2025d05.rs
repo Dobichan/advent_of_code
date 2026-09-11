@@ -1,7 +1,5 @@
 use crate::AoCSolution;
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 5;
 pub struct Solution {}
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -27,17 +25,7 @@ impl IdRange {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let ranges_and_ids: Vec<_> = input.trim().split("\n\n").collect();
         let ranges: Vec<_> = ranges_and_ids[0]
             .lines()
@@ -64,10 +52,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123456789012345i64.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let ranges_and_ids: Vec<_> = input.trim().split("\n\n").collect();
         let mut ranges: Vec<_> = ranges_and_ids[0]
             .lines()
@@ -117,7 +102,7 @@ mod tests {
                     32";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "3");
     }
@@ -137,7 +122,7 @@ mod tests {
                     32";
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "14");
     }

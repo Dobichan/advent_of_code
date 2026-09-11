@@ -1,7 +1,5 @@
 use crate::{AoCSolution, grid::Grid};
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 4;
 pub struct Solution {}
 
 pub fn removeable_paper_roll(grid: &Grid, row: usize, col: usize) -> bool {
@@ -61,17 +59,7 @@ pub fn remove_rolls(grid: &mut Grid) -> usize {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let grid: Grid = input.parse().expect("Faild to parse input grid");
         let mut ret = 0;
 
@@ -85,10 +73,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let mut grid: Grid = input.parse().expect("Failed to parse grid");
         let mut ret = 0;
 
@@ -123,7 +108,7 @@ mod tests {
                 @.@.@@@.@.";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "13");
     }
@@ -142,7 +127,7 @@ mod tests {
                 @.@.@@@.@.";
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "43");
     }

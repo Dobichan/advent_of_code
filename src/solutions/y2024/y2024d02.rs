@@ -3,8 +3,6 @@ use crate::{
     parsing::{input_to_vectors, line_numbers_to_vec},
 };
 
-const YEAR: u16 = 2024;
-const DAY: u8 = 2;
 pub struct Solution {}
 
 fn is_valid_pair(a: &i64, b: &i64, ascending: &bool) -> bool {
@@ -29,17 +27,7 @@ fn is_valid_sequence(numbers: &[i64], ascending: &bool) -> bool {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut count = 0;
 
         for line in input_to_vectors(input) {
@@ -53,10 +41,7 @@ impl AoCSolution for Solution {
         count.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let mut count = 0;
 
         for line in input_to_vectors(input) {
@@ -98,7 +83,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "2");
     }
@@ -115,7 +100,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "4");
     }

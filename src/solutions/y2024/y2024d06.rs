@@ -1,9 +1,6 @@
 use crate::{AoCSolution, grid::Grid};
 use std::collections::HashMap;
 
-const YEAR: u16 = 2024;
-const DAY: u8 = 6;
-
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 enum Direction {
     North,
@@ -73,18 +70,7 @@ fn guard_inside_grid(guard: &Guard, world: &Grid) -> bool {
 pub struct Solution {}
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut world: Grid = input.parse().unwrap();
 
         let guard_pos = world
@@ -108,10 +94,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let start_grid: Grid = input.parse().unwrap();
 
         let mut ret = 0;
@@ -189,7 +172,7 @@ mod tests {
 
         let mut sol = Solution {};
 
-        assert_eq!(sol.part1(EXAMPLE_INPUT.trim(), false), "41");
+        assert_eq!(sol.part1(EXAMPLE_INPUT.trim()), "41");
     }
 
     #[test]
@@ -208,6 +191,6 @@ mod tests {
 
         let mut sol = Solution {};
 
-        assert_eq!(sol.part2(EXAMPLE_INPUT.trim(), false), "6");
+        assert_eq!(sol.part2(EXAMPLE_INPUT.trim()), "6");
     }
 }

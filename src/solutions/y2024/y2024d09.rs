@@ -1,7 +1,5 @@
 use crate::AoCSolution;
 
-const YEAR: u16 = 2024;
-const DAY: u8 = 9;
 pub struct Solution {}
 
 #[derive(Clone, Debug)]
@@ -188,28 +186,14 @@ fn calculate_checksum(disk: &[Block]) -> u64 {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890123i64.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let disk = parse(input, false);
         let defrag = defragment(&disk);
 
         calculate_checksum(&defrag).to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890123i64.to_string();
-        }
-
+    fn part2(&mut self, input: &str) -> String {
         let mut disk = parse(input, true);
         let defrag = defragment_type2(&mut disk);
 
@@ -226,7 +210,7 @@ mod tests {
         const EXAMPLE_INPUT: &str = "12345";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "60");
     }
@@ -236,7 +220,7 @@ mod tests {
         const EXAMPLE_INPUT: &str = "2333133121414131402";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "1928");
     }
@@ -246,7 +230,7 @@ mod tests {
         const EXAMPLE_INPUT: &str = "2333133121414131402";
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "2858");
     }

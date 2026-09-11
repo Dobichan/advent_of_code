@@ -2,8 +2,6 @@ use std::collections::HashMap;
 
 use crate::AoCSolution;
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 2;
 pub struct Solution {}
 
 #[derive(Debug, PartialEq)]
@@ -115,17 +113,7 @@ fn create_illegal_number2(prefix: u64, num_digits: i32) -> u64 {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 12345678901i64.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let products = parse(input);
         let mut ret: u64 = 0;
 
@@ -137,10 +125,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 12345678901i64.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let products = parse(input);
         let mut ret: u64 = 0;
 
@@ -272,7 +257,7 @@ mod tests {
                                      2121212118-2121212124";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "1227775554");
     }
@@ -330,7 +315,7 @@ mod tests {
                                      2121212118-2121212124";
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "4174379265");
     }

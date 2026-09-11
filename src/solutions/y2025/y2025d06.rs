@@ -1,7 +1,5 @@
 use crate::AoCSolution;
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 6;
 pub struct Solution {}
 
 #[derive(Debug, Copy, Clone)]
@@ -41,18 +39,7 @@ impl MathProblem {
     }
 }
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890123i64.to_string();
-        }
-
+    fn part1(&mut self, input: &str) -> String {
         let mut ret: u64 = 0;
         let mut problems = Vec::with_capacity(1000);
         let mut digit_rows = Vec::with_capacity(10);
@@ -94,11 +81,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 12345678901234i64.to_string();
-        }
-
+    fn part2(&mut self, input: &str) -> String {
         let mut ret: u64 = 0;
 
         let inputs: Vec<_> = input.trim().lines().collect();
@@ -163,7 +146,7 @@ mod tests {
                 *   +   *   +  ";
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "4277556");
     }
@@ -174,7 +157,7 @@ mod tests {
             "123 328  51 64 \n 45 64  387 23 \n  6 98  215 314\n*   +   *   +  ";
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "3263827");
     }

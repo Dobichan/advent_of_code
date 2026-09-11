@@ -6,9 +6,6 @@ use nom::multi::separated_list1;
 use nom::sequence::separated_pair;
 use nom::{IResult, Parser};
 
-const YEAR: u16 = 2024;
-const DAY: u8 = 5;
-
 #[derive(Debug)]
 struct PrintJob {
     pages: Vec<i64>,
@@ -90,18 +87,7 @@ fn parse(input: &str) -> (MultiMap<i64, i64>, Vec<PrintJob>) {
 pub struct Solution {}
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let (rules, jobs) = parse(input);
 
         let mut ret = 0;
@@ -114,10 +100,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let (rules, jobs) = parse(input);
 
         let mut ret = 0;
@@ -170,7 +153,7 @@ mod tests {
         97,13,75,29,47";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part1(EXAMPLE_INPUT, false), "143")
+        assert_eq!(sol.part1(EXAMPLE_INPUT), "143")
     }
 
     #[test]
@@ -206,6 +189,6 @@ mod tests {
         97,13,75,29,47";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part2(EXAMPLE_INPUT, false), "123")
+        assert_eq!(sol.part2(EXAMPLE_INPUT), "123")
     }
 }

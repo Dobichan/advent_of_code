@@ -1,9 +1,6 @@
 use crate::AoCSolution;
 use crate::grid::*;
 
-const YEAR: u16 = 2024;
-const DAY: u8 = 4;
-
 enum Direction {
     UpLeft,
     Up,
@@ -133,18 +130,7 @@ fn check_mas(grid: &Grid, x: usize, y: usize) -> bool {
 pub struct Solution {}
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut ret = 0;
         let grid: Grid = input.parse().expect("Failed to parse grid");
         for y in 0..grid.height() {
@@ -161,10 +147,7 @@ impl AoCSolution for Solution {
         ret.to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let mut ret = 0;
         let grid: Grid = input.parse().expect("Failed to parse grid");
 
@@ -198,7 +181,7 @@ mod tests {
         MXMXAXMASX";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part1(EXAMPLE_INPUT, false), "18");
+        assert_eq!(sol.part1(EXAMPLE_INPUT), "18");
     }
 
     #[test]
@@ -216,6 +199,6 @@ mod tests {
         MXMXAXMASX";
 
         let mut sol = Solution {};
-        assert_eq!(sol.part2(EXAMPLE_INPUT, false), "9");
+        assert_eq!(sol.part2(EXAMPLE_INPUT), "9");
     }
 }

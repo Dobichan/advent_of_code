@@ -7,8 +7,6 @@ use nom::character::complete::i64;
 use nom::sequence::separated_pair;
 use std::cmp::min;
 
-const YEAR: u16 = 2015;
-const DAY: u8 = 2;
 pub struct Solution {}
 
 fn get_dimmentions(input: &str) -> IResult<&str, (i64, i64, i64)> {
@@ -20,18 +18,7 @@ fn get_dimmentions(input: &str) -> IResult<&str, (i64, i64, i64)> {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let mut total = 0;
         for line in input_to_vectors(input) {
             let (_, (l, w, h)) = get_dimmentions(&line).unwrap();
@@ -44,10 +31,7 @@ impl AoCSolution for Solution {
         }
         total.to_string()
     }
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let mut total = 0;
         for line in input_to_vectors(input) {
             let (_, (l, w, h)) = get_dimmentions(&line).unwrap();
@@ -69,19 +53,19 @@ mod tests {
     fn test_part1() {
         const INPUT1: &str = r"2x3x4";
         let mut sol = Solution {};
-        assert_eq!(sol.part1(INPUT1, false), "58");
+        assert_eq!(sol.part1(INPUT1), "58");
 
         const INPUT2: &str = r"1x1x10";
-        assert_eq!(sol.part1(INPUT2, false), "43");
+        assert_eq!(sol.part1(INPUT2), "43");
     }
 
     #[test]
     fn test_part2() {
         const INPUT1: &str = r"2x3x4";
         let mut sol = Solution {};
-        assert_eq!(sol.part2(INPUT1, false), "34");
+        assert_eq!(sol.part2(INPUT1), "34");
 
         const INPUT2: &str = r"1x1x10";
-        assert_eq!(sol.part2(INPUT2, false), "14");
+        assert_eq!(sol.part2(INPUT2), "14");
     }
 }

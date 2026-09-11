@@ -32,5 +32,5 @@ fn main() {
         std::process::exit(1);
     };
 
-    runner::run(solution.as_mut(), &input, part, dryrun);
+    runner::run(solution.as_mut(), year, day, &input, part, dryrun);
 }

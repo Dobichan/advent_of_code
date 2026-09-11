@@ -1,8 +1,5 @@
 use crate::AoCSolution;
 
-const YEAR: u16 = 2025;
-const DAY: u8 = 8;
-
 #[derive(Default)]
 pub struct Solution {
     pub(crate) num_operations_part1: usize,
@@ -66,17 +63,7 @@ impl Solution {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 12345.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         if self.boxes.is_none() {
             self.create_boxes(input);
         }
@@ -154,10 +141,7 @@ impl AoCSolution for Solution {
         (circuits[0].len() * circuits[1].len() * circuits[2].len()).to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 1234567890.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         if self.boxes.is_none() {
             self.create_boxes(input);
         }
@@ -280,7 +264,7 @@ mod tests {
             num_operations_part1: 10,
             ..Default::default()
         };
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "40");
     }
@@ -312,7 +296,7 @@ mod tests {
             num_operations_part1: 10,
             ..Default::default()
         };
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "25272");
     }

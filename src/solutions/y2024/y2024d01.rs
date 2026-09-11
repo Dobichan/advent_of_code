@@ -1,7 +1,5 @@
 use crate::{AoCSolution, parsing::numbers_to_pair};
 
-const YEAR: u16 = 2024;
-const DAY: u8 = 1;
 pub struct Solution {}
 
 fn input_to_vectors(lines: &[String]) -> (Vec<i64>, Vec<i64>) {
@@ -9,17 +7,7 @@ fn input_to_vectors(lines: &[String]) -> (Vec<i64>, Vec<i64>) {
 }
 
 impl AoCSolution for Solution {
-    fn year(&self) -> u16 {
-        YEAR
-    }
-    fn day(&self) -> u8 {
-        DAY
-    }
-
-    fn part1(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part1(&mut self, input: &str) -> String {
         let (mut list1, mut list2) = input_to_vectors(&crate::parsing::input_to_vectors(input));
 
         list1.sort();
@@ -33,10 +21,7 @@ impl AoCSolution for Solution {
             .to_string()
     }
 
-    fn part2(&mut self, input: &str, dryrun: bool) -> String {
-        if dryrun {
-            return 123.to_string();
-        }
+    fn part2(&mut self, input: &str) -> String {
         let (mut list1, mut list2) = input_to_vectors(&crate::parsing::input_to_vectors(input));
 
         list1.sort();
@@ -73,7 +58,7 @@ mod tests {
         assert_eq!(seconds, [4, 3, 5, 3, 9, 3]);
 
         let mut sol = Solution {};
-        let answer = sol.part1(EXAMPLE_INPUT, false);
+        let answer = sol.part1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "11");
     }
@@ -90,7 +75,7 @@ mod tests {
             "#;
 
         let mut sol = Solution {};
-        let answer = sol.part2(EXAMPLE_INPUT, false);
+        let answer = sol.part2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "31");
     }
