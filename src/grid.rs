@@ -119,7 +119,7 @@ impl fmt::Display for Grid {
             let row_string: String = row.iter().collect();
             write!(f, "{}", row_string)?;
             if i < self.height() - 1 {
-                write!(f, "\n")?;
+                writeln!(f)?;
             }
         }
         Ok(())

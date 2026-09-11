@@ -7,11 +7,7 @@ pub struct GosperIterator {
 
 impl GosperIterator {
     pub fn new(max: u32) -> Self {
-        GosperIterator {
-            max: max,
-            bits: 1,
-            v: 1,
-        }
+        GosperIterator { max, bits: 1, v: 1 }
     }
 }
 

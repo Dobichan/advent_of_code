@@ -4,7 +4,7 @@ use std::path::Path;
 pub fn read_input(input_file: &str) -> String {
     let path = Path::new(input_file);
 
-    fs::read_to_string(&path).unwrap_or_else(|_| panic!("Could not read input file: {:?}", path))
+    fs::read_to_string(path).unwrap_or_else(|_| panic!("Could not read input file: {:?}", path))
 }
 
 pub fn read_input_lines(input_file: &str) -> Vec<String> {

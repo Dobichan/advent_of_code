@@ -67,7 +67,7 @@ fn get_rectangles(points: &[Point]) -> Vec<Rectangle> {
             rectangles.push(rect);
         }
     }
-    rectangles.sort_by(|a, b| b.area.cmp(&a.area));
+    rectangles.sort_by_key(|b| std::cmp::Reverse(b.area));
     rectangles
 }
 

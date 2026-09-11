@@ -23,7 +23,7 @@ pub trait AoCSolution {
         );
 
         let start = std::time::Instant::now();
-        let answer = self.part1(&input, dryrun);
+        let answer = self.part1(input, dryrun);
         let end = std::time::Instant::now();
         println!(
             "Part 1:{} {answer} - in {:.3} ms",
@@ -32,7 +32,7 @@ pub trait AoCSolution {
         );
 
         let start = std::time::Instant::now();
-        let answer = self.part2(&input, dryrun);
+        let answer = self.part2(input, dryrun);
         let end = std::time::Instant::now();
         println!(
             "Part 2:{} {answer} - in {:.3} ms",
@@ -53,7 +53,7 @@ pub trait AoCSolution {
         );
 
         let start = std::time::Instant::now();
-        let answer = self.part1(&input, dryrun);
+        let answer = self.part1(input, dryrun);
         let end = std::time::Instant::now();
         println!(
             "Part 1: {answer} - in {:.3} ms",
@@ -73,7 +73,7 @@ pub trait AoCSolution {
         );
 
         let start = std::time::Instant::now();
-        let answer = self.part2(&input, dryrun);
+        let answer = self.part2(input, dryrun);
         let end = std::time::Instant::now();
         println!(
             "Part 2: {answer} - in {:.3} ms",
