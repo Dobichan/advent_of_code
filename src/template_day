@@ -1,14 +1,23 @@
+use std::fmt::Display;
+
 use crate::AoCSolution;
 
+#[derive(Default)]
 pub struct Solution {}
 
 impl AoCSolution for Solution {
-    fn part1(&mut self, input: &str) -> String {
-        input.to_string()
+    type Parsed = Vec<char>;
+
+    fn parse(&self, input: &str) -> Self::Parsed {
+        input.chars().collect()
     }
 
-    fn part2(&mut self, input: &str) -> String {
-        input.to_string()
+    fn part1(&self, data: &Self::Parsed) -> impl Display {
+        todo!()
+    }
+
+    fn part2(&self, data: &Self::Parsed) -> impl Display {
+        todo!()
     }
 }
 
@@ -18,22 +27,22 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        const EXAMPLE_INPUT: &str = r#"
-            "#;
+        const EXAMPLE_INPUT: &str = r"
+";
 
-        let mut sol = Solution {};
-        let answer = sol.part1(&EXAMPLE_INPUT);
+        let sol = Solution::default();
+        let answer = sol.solve1(EXAMPLE_INPUT);
 
         assert_eq!(answer, "");
     }
 
     #[test]
     fn test_part2() {
-        const EXAMPLE_INPUT: &str = r#"
-            "#;
+        const EXAMPLE_INPUT: &str = r"
+";
 
-        let mut sol = Solution {};
-        let answer = sol.part2(&EXAMPLE_INPUT);
+        let sol = Solution::default();
+        let answer = sol.solve2(EXAMPLE_INPUT);
 
         assert_eq!(answer, "");
     }

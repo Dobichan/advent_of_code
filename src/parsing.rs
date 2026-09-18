@@ -1,8 +1,8 @@
 use std::fs;
 use std::path::Path;
 
-pub fn read_input(input_file: &str) -> String {
-    let path = Path::new(input_file);
+pub fn read_input(input_file: impl AsRef<Path>) -> String {
+    let path = input_file.as_ref();
 
     fs::read_to_string(path).unwrap_or_else(|_| panic!("Could not read input file: {:?}", path))
 }
@@ -14,8 +14,11 @@ pub fn read_input_lines(input_file: &str) -> Vec<String> {
         .collect()
 }
 
+pub fn input_lines(input: &str) -> impl Iterator<Item = &str> {
+    input.trim().lines()
+}
 pub fn input_to_vectors(input: &str) -> Vec<String> {
-    input.trim().lines().map(|s| s.to_string()).collect()
+    input_lines(input).map(|s| s.to_string()).collect()
 }
 
 pub fn numbers_to_pair(line: &str) -> (i64, i64) {

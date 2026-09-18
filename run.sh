@@ -5,7 +5,5 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
-year=$1
-day=$(printf "%02d" $2)
 
-cargo run --release ${year} ${day} input/$year/day$day.txt a
+cargo run --release -- "$1" "$2"

@@ -1,45 +1,38 @@
-use crate::AoCSolution;
+use crate::runner::{Runner, runner};
 
 pub mod y2015;
 pub mod y2024;
 pub mod y2025;
 
-pub fn lookup(year: u16, day: u8) -> Option<Box<dyn AoCSolution>> {
-    use y2015::*;
-    use y2024::*;
-    use y2025::*;
-
+pub fn lookup(year: u16, day: u8) -> Option<Runner> {
     Some(match (year, day) {
-        (2015, 1) => Box::new(y2015d01::Solution {}),
-        (2015, 2) => Box::new(y2015d02::Solution {}),
-        (2015, 3) => Box::new(y2015d03::Solution {}),
-        (2015, 4) => Box::new(y2015d04::Solution {}),
-        (2015, 5) => Box::new(y2015d05::Solution::default()),
+        (2015, 1) => runner::<y2015::day01::Solution>(),
+        (2015, 2) => runner::<y2015::day02::Solution>(),
+        (2015, 3) => runner::<y2015::day03::Solution>(),
+        (2015, 4) => runner::<y2015::day04::Solution>(),
+        (2015, 5) => runner::<y2015::day05::Solution>(),
 
-        (2024, 1) => Box::new(y2024d01::Solution {}),
-        (2024, 2) => Box::new(y2024d02::Solution {}),
-        (2024, 3) => Box::new(y2024d03::Solution {}),
-        (2024, 4) => Box::new(y2024d04::Solution {}),
-        (2024, 5) => Box::new(y2024d05::Solution {}),
-        (2024, 6) => Box::new(y2024d06::Solution {}),
-        (2024, 7) => Box::new(y2024d07::Solution {}),
-        (2024, 8) => Box::new(y2024d08::Solution {}),
-        (2024, 9) => Box::new(y2024d09::Solution {}),
+        (2024, 1) => runner::<y2024::day01::Solution>(),
+        (2024, 2) => runner::<y2024::day02::Solution>(),
+        (2024, 3) => runner::<y2024::day03::Solution>(),
+        (2024, 4) => runner::<y2024::day04::Solution>(),
+        (2024, 5) => runner::<y2024::day05::Solution>(),
+        (2024, 6) => runner::<y2024::day06::Solution>(),
+        (2024, 7) => runner::<y2024::day07::Solution>(),
+        (2024, 8) => runner::<y2024::day08::Solution>(),
+        (2024, 9) => runner::<y2024::day09::Solution>(),
+        (2024, 10) => runner::<y2024::day10::Solution>(),
 
-        (2025, 1) => Box::new(y2025d01::Solution {}),
-        (2025, 2) => Box::new(y2025d02::Solution {}),
-        (2025, 3) => Box::new(y2025d03::Solution {}),
-        (2025, 4) => Box::new(y2025d04::Solution {}),
-        (2025, 5) => Box::new(y2025d05::Solution {}),
-        (2025, 6) => Box::new(y2025d06::Solution {}),
-        (2025, 7) => Box::new(y2025d07::Solution {}),
-        (2025, 8) => Box::new(y2025d08::Solution {
-            num_operations_part1: 1000,
-            ..Default::default()
-        }),
-        (2025, 9) => Box::new(y2025d09::Solution::default()),
-        (2025, 10) => Box::new(y2025d10::Solution {}),
-
+        (2025, 1) => runner::<y2025::day01::Solution>(),
+        (2025, 2) => runner::<y2025::day02::Solution>(),
+        (2025, 3) => runner::<y2025::day03::Solution>(),
+        (2025, 4) => runner::<y2025::day04::Solution>(),
+        (2025, 5) => runner::<y2025::day05::Solution>(),
+        (2025, 6) => runner::<y2025::day06::Solution>(),
+        (2025, 7) => runner::<y2025::day07::Solution>(),
+        (2025, 8) => runner::<y2025::day08::Solution>(),
+        (2025, 9) => runner::<y2025::day09::Solution>(),
+        // (2025, 10) => runner::<y2025::day10::Solution>(),
         _ => return None,
     })
 }

@@ -1,4 +1,5 @@
 use std::{
+    fmt::Display,
     str::FromStr,
     time::{Duration, Instant},
 };
@@ -35,34 +36,20 @@ impl Part {
     }
 }
 
-pub fn run(
-    solution: &mut dyn AoCSolution,
-    year: u16,
-    day: u8,
-    input: &str,
-    part: Part,
-    dryrun: bool,
-) {
-    let suffix = if dryrun { " dry-run" } else { "" };
-    println!("-- Advent of Code {year} day {day}{suffix}");
+pub type Runner = fn(input: &str, part: Part);
 
-    if dryrun {
-        println!(
-            "Input: {} bytes, {} lines",
-            input.len(),
-            input.lines().count()
-        );
-        return;
-    }
+pub fn run<S: AoCSolution>(solution: S, input: &str, part: Part) {
+    let (data, elapsed) = timed(|| solution.parse(input));
+    println!("Parse: in {:.3} ms", elapsed.as_secs_f64() * 1000.0);
 
     if part.is_part1() {
-        let (answer, elapsed) = timed(|| solution.part1(input));
-        report(1, &answer, elapsed);
+        let (answer, elapsed) = timed(|| solution.part1(&data));
+        report(1, answer, elapsed);
     }
 
     if part.is_part2() {
-        let (answer, elapsed) = timed(|| solution.part2(input));
-        report(2, &answer, elapsed);
+        let (answer, elapsed) = timed(|| solution.part2(&data));
+        report(2, answer, elapsed);
     }
 }
 
@@ -72,9 +59,13 @@ fn timed<T>(f: impl FnOnce() -> T) -> (T, Duration) {
     (ret_val, start.elapsed())
 }
 
-fn report(part: u8, answer: &str, elapsed: Duration) {
+fn report(part: u8, answer: impl Display, elapsed: Duration) {
     println!(
         "Part {part}: {answer} - in {:.3} ms",
         elapsed.as_secs_f64() * 1000.0
     )
+}
+
+pub fn runner<S: AoCSolution + Default>() -> Runner {
+    |input, part| run(S::default(), input, part)
 }
