@@ -1,3 +1,7 @@
+/// This iterator gives output of numbers from 0 to max, where each number given increases in number of bits set.
+/// If max = 12, it produces 1 2 4 8 - all with one bit set, then
+/// 3 5 6 9 10 12 - two bits set, then
+/// 7 11 - 3 bits set
 #[derive(Debug)]
 pub struct GosperIterator {
     max: u32,
