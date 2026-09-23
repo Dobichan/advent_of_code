@@ -1,26 +1,18 @@
-use std::fmt::Display;
+use std::{collections::HashMap, fmt::Display};
 
-use itertools::Itertools;
-use rayon::iter::IntoParallelRefIterator;
-use rayon::iter::ParallelIterator;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
-use crate::{AoCSolution, iterators::GosperIterator};
+use crate::AoCSolution;
 
 #[derive(Debug, Default)]
 pub struct Solution {}
 
 #[derive(Debug)]
 pub struct Machine {
-    indicators: u32,
-    buttons: Vec<Vec<usize>>,
-    buttons_bitmask: Vec<u32>,
-    joltage_requirements: Vec<Joltage>,
-}
-
-#[derive(Debug)]
-pub struct Joltage {
-    level: isize,
-    contributing_buttons: Vec<usize>,
+    part1_led_pattern: usize,         // Affected LEDs for part 1
+    toggle_masks: Vec<usize>, // Resulting battery/led affected for each button combo precomputed
+    joltage_requirements: Vec<isize>, // Required jotage level of all the batteries
+    joltage_adjusts: Vec<Vec<isize>>, // Adjusted jotage level per battery for each button combination
 }
 
 impl Machine {
@@ -28,6 +20,12 @@ impl Machine {
         let elements: Vec<_> = input.trim().split(' ').collect();
         let indicators = elements[0];
         let joltage = elements[elements.len() - 1];
+
+        let part1_led_pattern = mask_from_bools(
+            indicators[1..indicators.len() - 1]
+                .chars()
+                .map(|c| c == '#'),
+        );
 
         let buttons: Vec<Vec<usize>> = elements[1..elements.len() - 1] // Only process buttons
             .iter()
@@ -39,133 +37,150 @@ impl Machine {
             })
             .collect();
 
-        let buttons_bitmask: Vec<u32> = buttons
+        let buttons_bitmask: Vec<usize> = buttons
             .iter()
-            .map(|btn| btn.iter().map(|&idx| 1u32 << idx).sum())
+            .map(|btn| btn.iter().map(|&idx| 1usize << idx).sum())
             .collect();
 
-        let joltages: Vec<Joltage> = joltage[1..joltage.len() - 1] // skip '{' and '}' - first and last
+        let num_buttons = buttons_bitmask.len();
+
+        let toggle_masks = (0..1usize << num_buttons)
+            .map(|btn_mask| {
+                (0..num_buttons)
+                    .map(|i| {
+                        if has_bit(btn_mask, i) {
+                            buttons_bitmask[i]
+                        } else {
+                            0
+                        }
+                    })
+                    .fold(0, |acc, btn_mask| acc ^ btn_mask)
+            })
+            .collect();
+
+        let joltages: Vec<isize> = joltage[1..joltage.len() - 1] // skip '{' and '}' - first and last
             .split(',')
-            .enumerate()
-            .map(|(i, jo)| Joltage {
-                level: jo.parse::<isize>().unwrap(),
-                contributing_buttons: buttons_bitmask
-                    .iter()
-                    .positions(|mask| mask & 1u32 << i != 0)
-                    .collect(),
+            .map(|jo| jo.parse::<isize>().unwrap())
+            .collect();
+
+        let num_batteries = joltages.len();
+        let none_buttons = vec![];
+        let joltage_adjusts = (0..1usize << num_buttons)
+            .map(|btn_mask| {
+                (0..num_buttons)
+                    .map(|i| {
+                        if has_bit(btn_mask, i) {
+                            &buttons[i]
+                        } else {
+                            &none_buttons
+                        }
+                    })
+                    .fold(vec![0; num_batteries], |mut acc, btn_mask| {
+                        for &i in btn_mask {
+                            acc[i] += 1
+                        }
+                        acc
+                    })
             })
             .collect();
 
         Self {
-            indicators: indicators[1..indicators.len() - 1]
-                .chars()
-                .enumerate()
-                .map(|(i, c)| if c == '#' { 1u32 << i } else { 0 })
-                .sum(),
-            buttons_bitmask,
-            buttons,
+            part1_led_pattern,
+            toggle_masks,
             joltage_requirements: joltages,
+            joltage_adjusts,
         }
     }
 
-    fn get_min_btn_presses_leds(&self) -> u32 {
-        let num_buttons = self.buttons_bitmask.len();
-        let index_numbers = GosperIterator::new((1u32 << num_buttons) - 1);
+    /// Returns a vec of bitmasks that indicates which button combinations
+    /// results in the desired pattern
+    fn get_button_combos(&self, pattern: usize) -> Vec<usize> {
+        self.toggle_masks
+            .iter()
+            .enumerate()
+            .filter(|(_, combo_result)| **combo_result == pattern)
+            .map(|(i, _)| i)
+            .collect()
+    }
 
-        for button_mask in index_numbers {
-            let mut res = 0;
-            for i in 0..num_buttons {
-                if (button_mask & 1u32 << i) != 0 {
-                    res ^= self.buttons_bitmask[i];
-                }
-            }
-            if res == self.indicators {
-                return button_mask.count_ones();
-            }
-        }
-
-        panic!("Solution not found! (Should not happen)");
+    fn get_min_btn_presses_leds(&self) -> usize {
+        self.get_button_combos(self.part1_led_pattern)
+            .iter()
+            .map(|btns| btns.count_ones() as usize)
+            .min()
+            .unwrap()
     }
 
     fn get_min_button_presses_joltage(&self) -> isize {
-        let mut residual: Vec<isize> = self.joltage_requirements.iter().map(|j| j.level).collect();
-        let mut presses = vec![None; self.buttons.len()];
+        let mut cache = HashMap::new();
 
-        self.min_presses(&mut residual, &mut presses, 0, isize::MAX)
+        self.min_buttons_joltage(&self.joltage_requirements, &mut cache)
             .expect("Machine has no valid button combination to reach desired joltage levels")
     }
 
-    fn min_presses(
+    fn min_buttons_joltage(
         &self,
-        residual: &mut [isize],        // remaining battery level
-        presses: &mut [Option<isize>], // Number of presses per button
-        spent: isize,                  // passes committed on this branch
-        mut bound: isize,              // only look at totals below this
+        levels: &[isize],
+        cache: &mut HashMap<Vec<isize>, Option<isize>>,
     ) -> Option<isize> {
-        let max_res = *residual.iter().max().unwrap();
-        let sum_res: isize = residual.iter().sum();
-        let widest = self.buttons.iter().map(Vec::len).max().unwrap() as isize;
-        let need = max_res.max((sum_res + widest - 1) / widest);
-        if spent + need >= bound {
-            return None;
+        if levels.iter().all(|&l| l == 0) {
+            return Some(0);
         }
 
-        let mut pick: Option<(usize, usize, Vec<usize>)> = None;
-        for (c, j) in self.joltage_requirements.iter().enumerate() {
-            let free: Vec<usize> = j
-                .contributing_buttons
+        if let Some(&cached) = cache.get(levels) {
+            return cached;
+        }
+
+        let mut best: Option<isize> = None;
+
+        let mask = parity_mask(levels);
+        let valid_combinations = self.get_button_combos(mask);
+
+        for combo in valid_combinations {
+            let adjusts = &self.joltage_adjusts[combo];
+
+            if adjusts
                 .iter()
-                .copied()
-                .filter(|&b| presses[b].is_none())
+                .zip(levels)
+                .any(|(adjust, level)| adjust > level)
+            {
+                continue; // It adjusts more than level and overshoots
+            }
+
+            let remaining_joltages: Vec<isize> = levels
+                .iter()
+                .zip(adjusts)
+                .map(|(level, adjust)| (level - adjust) / 2)
                 .collect();
 
-            match (free.is_empty(), residual[c]) {
-                (true, 0) => continue,    // satisfied
-                (true, _) => return None, // fixed buttons miss the target
-                (false, r) => {
-                    let key = if r == 0 { 0 } else { free.len() };
-                    if pick.as_ref().is_none_or(|(k, ..)| key < *k) {
-                        pick = Some((key, c, free));
-                    }
-                }
+            if let Some(remaing_presses) = self.min_buttons_joltage(&remaining_joltages, cache) {
+                let total = combo.count_ones() as isize + 2 * remaing_presses;
+                best = Some(best.map_or(total, |b| b.min(total)));
             }
         }
-
-        let Some((_, counter, free)) = pick else {
-            return Some(spent);
-        };
-
-        let target = residual[counter];
-        let button = free[0];
-        let affected = &self.buttons[button];
-
-        // Last free button for this counter: its value is forced
-        let range = if free.len() == 1 {
-            target..=target
-        } else {
-            0..=target
-        };
-        let mut best = None;
-
-        for n in range {
-            if affected.iter().any(|&c| residual[c] < n) {
-                break; // would overshoot a counter this button feeds
-            }
-
-            presses[button] = Some(n);
-            affected.iter().for_each(|&c| residual[c] -= n);
-
-            if let Some(total) = self.min_presses(residual, presses, spent + n, bound) {
-                bound = total; // later branches must beat this
-                best = Some(total);
-            }
-
-            affected.iter().for_each(|&c| residual[c] += n);
-            presses[button] = None;
-        }
+        cache.insert(levels.to_vec(), best);
 
         best
     }
+}
+
+fn has_bit(mask: usize, i: usize) -> bool {
+    1usize << i & mask != 0
+}
+
+fn mask_from_bools(bits: impl IntoIterator<Item = bool>) -> usize {
+    bits.into_iter()
+        .enumerate()
+        .filter(|&(_, bit)| bit)
+        .fold(0, |mask, (i, _)| mask | 1 << i)
+}
+
+fn parity_mask(levels: &[isize]) -> usize {
+    levels
+        .iter()
+        .enumerate()
+        .filter(|&(_, &level)| level & 1 != 0)
+        .fold(0, |mask, (i, _)| mask | 1 << i)
 }
 
 impl AoCSolution for Solution {
@@ -178,16 +193,12 @@ impl AoCSolution for Solution {
     fn part1(&self, data: &Self::Parsed) -> impl Display {
         data.iter()
             .map(|m| m.get_min_btn_presses_leds())
-            .sum::<u32>()
+            .sum::<usize>()
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
         data.par_iter()
-            .map(|m| {
-                let a = m.get_min_button_presses_joltage();
-                println!("presses: {a}");
-                a
-            })
+            .map(|m| m.get_min_button_presses_joltage())
             .sum::<isize>()
     }
 }
