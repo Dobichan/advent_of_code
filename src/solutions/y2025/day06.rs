@@ -91,11 +91,11 @@ impl AoCSolution for Solution {
             );
             bytes_row.push(line.as_bytes().to_vec());
         }
-        dbg!(ParseData {
+        ParseData {
             numbers_row,
             bytes_row,
             operators,
-        })
+        }
     }
 
     fn part1(&self, data: &Self::Parsed) -> impl Display {

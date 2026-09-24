@@ -1,4 +1,4 @@
-use std::{cmp::Reverse, fmt::Display};
+use std::fmt::Display;
 
 use itertools::Itertools;
 
@@ -38,16 +38,6 @@ impl Rectangle {
     }
 }
 
-fn rectangles(points: &[Point]) -> Vec<Rectangle> {
-    let mut rectangles: Vec<Rectangle> = points
-        .iter()
-        .tuple_combinations()
-        .map(|(a, b)| Rectangle::spanning(*a, *b))
-        .collect();
-    rectangles.sort_by_key(|r| Reverse(r.area));
-    rectangles
-}
-
 fn boundary_lines(points: &[Point]) -> (Vec<Line>, Vec<Line>) {
     let mut horizontal = Vec::with_capacity(points.len());
     let mut vertical = Vec::with_capacity(points.len());
@@ -73,31 +63,22 @@ fn boundary_lines(points: &[Point]) -> (Vec<Line>, Vec<Line>) {
     (horizontal, vertical)
 }
 
-fn points_inside(rect: &Rectangle, points: &[Point]) -> bool {
-    points.iter().any(|p| {
-        p.x > rect.top_left.x
-            && p.x < rect.top_right.x
-            && p.y > rect.top_left.y
-            && p.y < rect.bot_left.y
-    })
-}
-
 fn horizontals_crossing(rect: &Rectangle, horizontals: &[Line]) -> bool {
-    horizontals.iter().any(|l| {
-        l.common > rect.top_left.y
-            && l.common < rect.bot_left.y
-            && l.from < rect.top_right.x
-            && l.to > rect.top_left.x
-    })
+    let start = horizontals.partition_point(|l| l.common <= rect.top_left.y);
+
+    horizontals[start..]
+        .iter()
+        .take_while(|l| l.common < rect.bot_left.y)
+        .any(|l| l.from < rect.top_right.x && l.to > rect.top_left.x)
 }
 
 fn verticals_crossing(rect: &Rectangle, verticals: &[Line]) -> bool {
-    verticals.iter().any(|l| {
-        l.common > rect.top_left.x
-            && l.common < rect.top_right.x
-            && l.from < rect.bot_left.y
-            && l.to > rect.top_left.y
-    })
+    let start = verticals.partition_point(|l| l.common <= rect.top_left.x);
+
+    verticals[start..]
+        .iter()
+        .take_while(|l| l.common < rect.top_right.x)
+        .any(|l| l.from < rect.bot_left.y && l.to > rect.top_left.y)
 }
 
 impl AoCSolution for Solution {
@@ -127,14 +108,20 @@ impl AoCSolution for Solution {
     fn part2(&self, points: &Self::Parsed) -> impl Display {
         let (horizontal, vertical) = boundary_lines(points);
 
-        rectangles(points)
+        points
             .iter()
-            .filter(|r| !points_inside(r, points))
-            .filter(|r| !horizontals_crossing(r, &horizontal))
-            .filter(|r| !verticals_crossing(r, &vertical))
-            .map(|r| r.area)
-            .next()
-            .expect("No rectangle satisfies the constraints")
+            .tuple_combinations()
+            .map(|(&a, &b)| Rectangle::spanning(a, b))
+            .fold(0, |best, r| {
+                if r.area > best
+                    && !horizontals_crossing(&r, &horizontal)
+                    && !verticals_crossing(&r, &vertical)
+                {
+                    r.area
+                } else {
+                    best
+                }
+            })
     }
 }
 

@@ -39,11 +39,7 @@ impl AoCSolution for Solution {
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
-        let mut ret = 0;
-        for bank in data {
-            ret += get_max_jolt(bank, 12);
-        }
-        ret
+        data.iter().map(|bank| get_max_jolt(bank, 12)).sum::<u64>()
     }
 }
 

@@ -39,8 +39,8 @@ impl Part {
 pub type Runner = fn(input: &str, part: Part);
 
 pub fn run<S: AoCSolution>(solution: S, input: &str, part: Part) {
-    let (data, elapsed) = timed(|| solution.parse(input));
-    println!("Parse: in {:.3} ms", elapsed.as_secs_f64() * 1000.0);
+    let (data, _elapsed) = timed(|| solution.parse(input));
+    // println!("Parse: in {:.3} ms", _elapsed.as_secs_f64() * 1000.0);
 
     if part.is_part1() {
         let (answer, elapsed) = timed(|| solution.part1(&data));

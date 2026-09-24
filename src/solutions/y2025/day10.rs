@@ -11,8 +11,8 @@ pub struct Solution {}
 pub struct Machine {
     part1_led_pattern: usize,         // Affected LEDs for part 1
     toggle_masks: Vec<usize>, // Resulting battery/led affected for each button combo precomputed
+    buttons: Vec<Vec<usize>>, // Battery indexes each button affects
     joltage_requirements: Vec<isize>, // Required jotage level of all the batteries
-    joltage_adjusts: Vec<Vec<isize>>, // Adjusted jotage level per battery for each button combination
 }
 
 impl Machine {
@@ -63,14 +63,25 @@ impl Machine {
             .map(|jo| jo.parse::<isize>().unwrap())
             .collect();
 
-        let num_batteries = joltages.len();
+        Self {
+            part1_led_pattern,
+            toggle_masks,
+            buttons,
+            joltage_requirements: joltages,
+        }
+    }
+
+    fn build_joltage_adjusts(&self) -> Vec<Vec<isize>> {
+        let num_buttons = self.buttons.len();
+        let num_batteries = self.joltage_requirements.len();
         let none_buttons = vec![];
-        let joltage_adjusts = (0..1usize << num_buttons)
+
+        (0..1usize << num_buttons)
             .map(|btn_mask| {
                 (0..num_buttons)
                     .map(|i| {
                         if has_bit(btn_mask, i) {
-                            &buttons[i]
+                            &self.buttons[i]
                         } else {
                             &none_buttons
                         }
@@ -82,14 +93,7 @@ impl Machine {
                         acc
                     })
             })
-            .collect();
-
-        Self {
-            part1_led_pattern,
-            toggle_masks,
-            joltage_requirements: joltages,
-            joltage_adjusts,
-        }
+            .collect()
     }
 
     /// Returns a vec of bitmasks that indicates which button combinations
@@ -112,15 +116,17 @@ impl Machine {
     }
 
     fn get_min_button_presses_joltage(&self) -> isize {
+        let joltage_adjusts = self.build_joltage_adjusts();
         let mut cache = HashMap::new();
 
-        self.min_buttons_joltage(&self.joltage_requirements, &mut cache)
+        self.min_buttons_joltage(&self.joltage_requirements, &joltage_adjusts, &mut cache)
             .expect("Machine has no valid button combination to reach desired joltage levels")
     }
 
     fn min_buttons_joltage(
         &self,
         levels: &[isize],
+        joltage_adjusts: &[Vec<isize>],
         cache: &mut HashMap<Vec<isize>, Option<isize>>,
     ) -> Option<isize> {
         if levels.iter().all(|&l| l == 0) {
@@ -137,7 +143,7 @@ impl Machine {
         let valid_combinations = self.get_button_combos(mask);
 
         for combo in valid_combinations {
-            let adjusts = &self.joltage_adjusts[combo];
+            let adjusts = &joltage_adjusts[combo];
 
             if adjusts
                 .iter()
@@ -153,8 +159,10 @@ impl Machine {
                 .map(|(level, adjust)| (level - adjust) / 2)
                 .collect();
 
-            if let Some(remaing_presses) = self.min_buttons_joltage(&remaining_joltages, cache) {
-                let total = combo.count_ones() as isize + 2 * remaing_presses;
+            if let Some(remaining_presses) =
+                self.min_buttons_joltage(&remaining_joltages, joltage_adjusts, cache)
+            {
+                let total = combo.count_ones() as isize + 2 * remaining_presses;
                 best = Some(best.map_or(total, |b| b.min(total)));
             }
         }

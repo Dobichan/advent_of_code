@@ -1,4 +1,4 @@
-use std::{cmp::Reverse, fmt::Display};
+use std::{cmp::Reverse, collections::BinaryHeap, fmt::Display};
 
 use nom::{IResult, Parser, bytes::complete::tag, character::complete::isize};
 
@@ -25,24 +25,6 @@ pub struct Network {
     pub pairs: Vec<(isize, (usize, usize))>,
 }
 
-// fn create_distances() {
-//     let mut distanses = Vec::with_capacity(self.num_operations_part1 * self.num_operations_part1);
-//     let num_boxes = self.boxes.as_ref().unwrap().len();
-
-//     for i in 0..num_boxes - 1 {
-//         for j in i + 1..num_boxes {
-//             let from = &self.boxes.as_ref().unwrap()[i];
-//             let to = &self.boxes.as_ref().unwrap()[j];
-
-//             let dist = from.distance(to);
-//             distanses.push((dist, (i, j)));
-//         }
-//     }
-
-//     distanses.sort();
-//     self.distances = Some(distanses);
-// }
-
 fn get_coordinates(input: &str) -> IResult<&str, Point3> {
     (isize, tag(","), isize, tag(","), isize)
         .map(|(x, _, y, _, z)| Point3::new(x, y, z))
@@ -56,7 +38,6 @@ fn sorted_pairs(boxes: &[Point3]) -> Vec<(isize, (usize, usize))> {
             pairs.push((boxes[i].distance_squared(boxes[j]), (i, j)));
         }
     }
-    pairs.sort_unstable();
     pairs
 }
 
@@ -91,9 +72,11 @@ impl AoCSolution for Solution {
     }
 
     fn part1(&self, data: &Self::Parsed) -> impl Display {
-        let mut circuits: Vec<Vec<usize>> = Vec::new();
+        let mut pairs = data.pairs.clone();
+        pairs.select_nth_unstable(self.num_operations_part1);
 
-        for &(_, (a, b)) in data.pairs.iter().take(self.num_operations_part1) {
+        let mut circuits: Vec<Vec<usize>> = Vec::new();
+        for &(_, (a, b)) in &pairs[..self.num_operations_part1] {
             join(&mut circuits, a, b);
         }
 
@@ -104,94 +87,16 @@ impl AoCSolution for Solution {
     fn part2(&self, data: &Self::Parsed) -> impl Display {
         let mut circuits: Vec<Vec<usize>> = Vec::new();
 
-        for &(_, (a, b)) in &data.pairs {
+        let mut heap: BinaryHeap<_> = data.pairs.iter().copied().map(Reverse).collect();
+
+        while let Some(Reverse((_, (a, b)))) = heap.pop() {
             join(&mut circuits, a, b);
             if circuits.len() == 1 && circuits[0].len() == data.boxes.len() {
                 return data.boxes[a].x * data.boxes[b].x;
             }
         }
+
         panic!("Failed to form a single circuit")
-
-        // for i in 0..self.distances.as_ref().unwrap().len() {
-        // println!("{i}: {:?}", &self.distances.as_ref().unwrap()[i]);
-        // }
-
-        // let mut circuits: Vec<Vec<_>> = Vec::new();
-        // let mut unused_boxes = self.boxes.as_ref().unwrap().len();
-        // let mut answer = 0;
-
-        // for i in 0..self.distances.as_ref().unwrap().len() {
-        //     let a = self.distances.as_ref().unwrap()[i].1.0;
-        //     let b = self.distances.as_ref().unwrap()[i].1.1;
-
-        //     // println!(
-        //     //     "\nChecking {a} and {b} - {:?}-{:?}  ",
-        //     //     self.boxes.as_ref().unwrap()[a],
-        //     //     self.boxes.as_ref().unwrap()[b]
-        //     // );
-        //     let mut a_index = None;
-        //     let mut b_index = None;
-
-        //     for (circuit_index, circuit) in circuits.iter().enumerate() {
-        //         // println!("{circuit_index}-{:?}  ", circuit);
-        //         if circuit.contains(&a) {
-        //             if a_index.is_some() {
-        //                 panic!("{a} found before!");
-        //             }
-        //             a_index = Some(circuit_index);
-        //         }
-        //         if circuit.contains(&b) {
-        //             if b_index.is_some() {
-        //                 panic!("{b} found before!");
-        //             }
-        //             b_index = Some(circuit_index);
-        //         }
-        //     }
-
-        //     if a_index.is_none() && b_index.is_none() {
-        //         // println!("new circuit");
-        //         circuits.push(vec![a, b]);
-        //         unused_boxes -= 2;
-        //     } else if a_index.is_some() && b_index.is_none() {
-        //         // println!("{b} is added to {:?}", a_index);
-        //         circuits[a_index.unwrap()].push(b);
-        //         unused_boxes -= 1;
-        //     } else if let (None, Some(b_index)) = (a_index, b_index) {
-        //         // println!("{a} is added to {:?}", b_index);
-        //         circuits[b_index].push(a);
-        //         unused_boxes -= 1;
-        //     } else if a_index.unwrap() != b_index.unwrap() {
-        //         // Merge a and b
-        //         let a_index = a_index.unwrap();
-        //         let b_index = b_index.unwrap();
-
-        //         let from = a_index.max(b_index);
-        //         let to = a_index.min(b_index);
-        //         // println!("merging {from} into {to} ({a_index}-{b_index})");
-        //         let mut append_circuit = circuits.remove(from);
-        //         circuits[to].append(&mut append_circuit);
-        //     } else {
-        //         // println!("{a} and {b} already in {:?}({:?})", a_index, b_index);
-        //     }
-        //     // println!("{i} - {:?}", circuits);
-
-        //     if unused_boxes == 0 {
-        //         // println!(
-        //         //     "Solution: {a}-{b} {:?}-{:?}",
-        //         //     self.boxes.as_ref().unwrap()[a],
-        //         //     self.boxes.as_ref().unwrap()[b]
-        //         // );
-        //         // println!("{:?}", circuits);
-
-        //         answer = self.boxes.as_ref().unwrap()[a].x * self.boxes.as_ref().unwrap()[b].x;
-        //         // println!("Answer: {answer}");
-        //         break;
-        //     }
-        // }
-
-        // // println!("\n\n{:?}", circuits);
-
-        // answer.to_string()
     }
 }
 

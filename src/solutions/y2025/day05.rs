@@ -29,12 +29,28 @@ impl AoCSolution for Solution {
     fn parse(&self, input: &str) -> Self::Parsed {
         let (ranges, ingrs) = input.trim().split_once("\n\n").expect("Malformed input.");
 
+        let mut merged_ranges: Vec<(u64, u64)> = Vec::new();
+
+        let mut ranges: Vec<(u64, u64)> = ranges
+            .trim()
+            .lines()
+            .map(|range| id_range(range).expect("Illegal range").1)
+            .collect();
+
+        ranges.sort();
+
+        for range in ranges {
+            if let Some(last) = merged_ranges.last_mut()
+                && range.0 <= last.1 + 1
+            {
+                last.1 = last.1.max(range.1);
+            } else {
+                merged_ranges.push(range);
+            }
+        }
+
         ParseData {
-            ranges: ranges
-                .trim()
-                .lines()
-                .map(|range| id_range(range).expect("Illegal range").1)
-                .collect(),
+            ranges: merged_ranges,
             ingredients: ingrs
                 .trim()
                 .lines()
@@ -51,24 +67,10 @@ impl AoCSolution for Solution {
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
-        let mut ranges = data.ranges.clone();
-        ranges.sort_unstable();
-
-        let mut total: u64 = 0;
-        let mut covered_to: Option<u64> = None;
-
-        for &(from, to) in &ranges {
-            let start = match covered_to {
-                Some(end) if end >= from => end + 1,
-                _ => from,
-            };
-
-            if start <= to {
-                total += to - start + 1;
-                covered_to = Some(to)
-            }
-        }
-        total
+        data.ranges
+            .iter()
+            .map(|range| range.1 - range.0 + 1)
+            .sum::<u64>()
     }
 }
 

@@ -3,6 +3,7 @@ use std::{collections::BTreeSet, fmt::Display};
 use nom::{
     IResult, Parser, bytes::complete::tag, character::complete::u64, multi::separated_list1,
 };
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::AoCSolution;
 
@@ -70,7 +71,7 @@ impl AoCSolution for Solution {
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
-        data.iter()
+        data.par_iter()
             .map(|&(from, to)| any_repeated_ids(from, to).iter().sum::<u64>())
             .sum::<u64>()
     }

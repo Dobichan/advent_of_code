@@ -94,5 +94,4 @@ fn main() {
         return;
     }
     run(&input, part);
-    // runner::run(solution.as_mut(), year, day, &input, part, dryrun);
 }
