@@ -25,25 +25,16 @@ impl AoCSolution for Solution {
 mod tests {
     use super::*;
 
-    #[test]
-    fn test_part1() {
-        const EXAMPLE_INPUT: &str = r"
+    const EXAMPLE_INPUT: &str = r"
 ";
 
-        let sol = Solution::default();
-        let answer = sol.solve1(EXAMPLE_INPUT);
-
-        assert_eq!(answer, "");
+    #[test]
+    fn test_part1() {
+        assert_eq(Solution::default().solve1(EXAMPLE_INPUT), "");
     }
 
     #[test]
     fn test_part2() {
-        const EXAMPLE_INPUT: &str = r"
-";
-
-        let sol = Solution::default();
-        let answer = sol.solve2(EXAMPLE_INPUT);
-
-        assert_eq!(answer, "");
+        assert_eq(Solution::default().solve2(EXAMPLE_INPUT), "");
     }
 }
