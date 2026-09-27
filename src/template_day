@@ -30,11 +30,11 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        assert_eq(Solution::default().solve1(EXAMPLE_INPUT), "");
+        assert_eq!(Solution::default().solve1(EXAMPLE_INPUT), "");
     }
 
     #[test]
     fn test_part2() {
-        assert_eq(Solution::default().solve2(EXAMPLE_INPUT), "");
+        assert_eq!(Solution::default().solve2(EXAMPLE_INPUT), "");
     }
 }
