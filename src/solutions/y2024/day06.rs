@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+
 use crate::{AoCSolution, direction::Direction, grid::Grid, point::Point};
 
 pub struct ParseData {
@@ -25,7 +27,7 @@ impl Guard {
         }
     }
 
-    fn step(&mut self, world: &Grid) {
+    fn step(&mut self, world: &Grid, obstacle: Option<Point>) {
         let seen_idx = seen_index(world, self.position, self.direction);
         if self.seen[seen_idx] {
             self.repeating = true;
@@ -37,14 +39,22 @@ impl Guard {
         let next = self.position + delta_point;
         match world.get(next) {
             Some('#') => self.direction = self.direction.turn_right(),
-            _ => self.position = next,
+            _ => {
+                if let Some(obs) = obstacle
+                    && obs == next
+                {
+                    self.direction = self.direction.turn_right();
+                } else {
+                    self.position = next;
+                }
+            }
         }
     }
 
-    fn walk(world: &Grid, start: Point) -> Guard {
+    fn walk(world: &Grid, start: Point, obstacle: Option<Point>) -> Guard {
         let mut guard = Self::new(world, start);
         while world.in_bounds(guard.position) && !guard.repeating {
-            guard.step(world)
+            guard.step(world, obstacle)
         }
         guard
     }
@@ -76,35 +86,29 @@ impl AoCSolution for Solution {
 
     fn parse(&self, input: &str) -> Self::Parsed {
         let world: Grid = input.parse().expect("Failed to parse the world grid");
-        let start = world
-            .find('^')
-            .expect("Initital guard position is missing.");
+        let start = world.find('^').expect("Initial guard position is missing.");
 
         ParseData { world, start }
     }
     fn part1(&self, data: &Self::Parsed) -> impl Display {
-        let guard = Guard::walk(&data.world, data.start);
+        let guard = Guard::walk(&data.world, data.start, None);
         guard.visited(&data.world).len()
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
-        let candidates = Guard::walk(&data.world, data.start).visited(&data.world);
-        let mut world = data.world.clone();
-        let mut ret = 0;
+        let candidates = Guard::walk(&data.world, data.start, None).visited(&data.world);
 
-        for p in candidates {
-            if p == data.start {
-                continue;
-            }
-
-            world.set(p, '#');
-            if Guard::walk(&world, data.start).repeating {
-                ret += 1;
-            }
-            world.set(p, '.');
-        }
-
-        ret
+        candidates
+            .par_iter()
+            .map(|&candidate| {
+                if candidate == data.start {
+                    return 0;
+                } else if Guard::walk(&data.world, data.start, Some(candidate)).repeating {
+                    return 1;
+                }
+                0
+            })
+            .sum::<u32>()
     }
 }
 

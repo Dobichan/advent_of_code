@@ -83,7 +83,12 @@ impl<T: Copy> Grid<T> {
     }
 
     pub fn iter(&self) -> GridIterator<'_, T> {
-        GridIterator { grid: self, i: 0 }
+        GridIterator {
+            grid: self,
+            i: 0,
+            x: 0,
+            y: 0,
+        }
     }
 }
 
@@ -100,6 +105,8 @@ impl<T: Copy + PartialEq> Grid<T> {
 pub struct GridIterator<'a, T> {
     grid: &'a Grid<T>,
     i: usize,
+    x: usize,
+    y: usize,
 }
 
 impl<T: Copy> Iterator for GridIterator<'_, T> {
@@ -107,8 +114,14 @@ impl<T: Copy> Iterator for GridIterator<'_, T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let c = *self.grid.cells.get(self.i)?;
-        let pos = Point::from((self.i % self.grid.width, self.i / self.grid.width));
+        let pos = Point::from((self.x, self.y));
+
         self.i += 1;
+        self.x += 1;
+        if self.x == self.grid.width {
+            self.x = 0;
+            self.y += 1;
+        }
         Some((pos, c))
     }
 }

@@ -7,17 +7,25 @@ use crate::point::Point;
 const MAS: [char; 3] = ['M', 'A', 'S'];
 
 fn check_xmas(grid: &Grid, dir: Point, start: Point) -> bool {
-    MAS.iter()
-        .enumerate()
-        .all(|(i, &c)| grid.get(start + dir * (i as isize + 1)) == Some(c))
+    let end = start + dir * 3;
+    if !grid.in_bounds(end) {
+        return false;
+    }
+    for (i, &c) in MAS.iter().enumerate() {
+        let p = start + dir * (i as isize + 1);
+        if grid[p] != c {
+            return false;
+        }
+    }
+    true
 }
 
-fn is_ms(a: Option<char>, b: Option<char>) -> bool {
-    matches!((a, b), (Some('M'), Some('S')) | (Some('S'), Some('M')))
+fn is_ms(a: char, b: char) -> bool {
+    matches!((a, b), ('M', 'S') | ('S', 'M'))
 }
 
 fn check_mas(grid: &Grid, center: Point) -> bool {
-    let [ur, dr, dl, ul] = Point::DIAGONAL.map(|d| grid.get(center + d));
+    let [ur, dr, dl, ul] = Point::DIAGONAL.map(|d| grid[center + d]);
     is_ms(ul, dr) && is_ms(ur, dl)
 }
 
@@ -43,7 +51,11 @@ impl AoCSolution for Solution {
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
-        data.find_all('A').filter(|&p| check_mas(data, p)).count()
+        let (w, h) = (data.width() as isize, data.height() as isize);
+        (1..h - 1)
+            .flat_map(|y| (1..w - 1).map(move |x| Point::new(x, y)))
+            .filter(|&p| data[p] == 'A' && check_mas(data, p))
+            .count()
     }
 }
 

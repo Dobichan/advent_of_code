@@ -1,9 +1,7 @@
 use nom::branch::alt;
 use nom::bytes::complete::tag;
-use nom::character::anychar;
 use nom::character::complete::u32;
 use nom::combinator::value;
-use nom::multi::{many_till, many1};
 use nom::{IResult, Parser};
 use std::fmt::Display;
 
@@ -38,10 +36,21 @@ impl AoCSolution for Solution {
     type Parsed = Vec<Instruction>;
 
     fn parse(&self, input: &str) -> Self::Parsed {
-        let (_, instructions) =
-            many1(many_till(anychar, instruction).map(|(_skip, instruction)| instruction))
-                .parse(input)
-                .unwrap();
+        let mut instructions = Vec::new();
+        let mut rest = input;
+
+        while let Some(pos) = rest.find(['m', 'd']) {
+            rest = &rest[pos..];
+
+            match instruction(rest) {
+                Ok((remaining, instruction)) => {
+                    instructions.push(instruction);
+                    rest = remaining
+                }
+                Err(_) => rest = &rest[1..],
+            }
+        }
+
         instructions
     }
 
@@ -72,6 +81,7 @@ impl AoCSolution for Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+
     #[test]
     fn test_part1() {
         const EXAMPLE_INPUT: &str = r"

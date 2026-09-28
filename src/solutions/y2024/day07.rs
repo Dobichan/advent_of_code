@@ -1,6 +1,5 @@
 use std::fmt::Display;
 
-use crate::{AoCSolution, parsing::input_lines};
 use nom::{
     IResult, Parser,
     bytes::tag,
@@ -8,6 +7,9 @@ use nom::{
     multi::separated_list1,
     sequence::{separated_pair, terminated},
 };
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+
+use crate::{AoCSolution, parsing::input_lines};
 
 #[derive(Copy, Clone, Debug)]
 enum Operator {
@@ -87,7 +89,7 @@ impl AoCSolution for Solution {
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
-        data.iter()
+        data.par_iter()
             .filter(|eq| eq.is_solvable(true))
             .map(|eq| eq.expected_sum)
             .sum::<i64>()

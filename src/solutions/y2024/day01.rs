@@ -36,10 +36,34 @@ impl AoCSolution for Solution {
     }
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
-        data.list1
-            .iter()
-            .map(|&num| num * data.list2.iter().filter(|&&x| x == num).count() as i64)
-            .sum::<i64>()
+        let mut i = 0;
+        let mut j = 0;
+        let mut total = 0;
+
+        let len1 = data.list1.len();
+        let len2 = data.list2.len();
+
+        while i < len1 && j < len2 {
+            if data.list1[i] < data.list2[j] {
+                i += 1
+            } else if data.list1[i] > data.list2[j] {
+                j += 1;
+            } else {
+                let value = data.list1[i];
+                let mut count1 = 0;
+                let mut count2 = 0;
+                while i < len1 && data.list1[i] == value {
+                    count1 += 1;
+                    i += 1;
+                }
+                while j < len2 && data.list2[j] == value {
+                    count2 += 1;
+                    j += 1;
+                }
+                total += value * count1 * count2;
+            }
+        }
+        total
     }
 }
 
