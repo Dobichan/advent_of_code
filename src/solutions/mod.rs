@@ -24,6 +24,7 @@ pub fn lookup(year: u16, day: u8) -> Option<Runner> {
         (2024, 10) => runner::<y2024::day10::Solution>(),
         (2024, 11) => runner::<y2024::day11::Solution>(),
         (2024, 12) => runner::<y2024::day12::Solution>(),
+        (2024, 13) => runner::<y2024::day13::Solution>(),
 
         (2025, 1) => runner::<y2025::day01::Solution>(),
         (2025, 2) => runner::<y2025::day02::Solution>(),
