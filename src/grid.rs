@@ -1,5 +1,6 @@
 use core::fmt;
 use std::{
+    collections::VecDeque,
     ops::{Index, IndexMut},
     str::FromStr,
 };
@@ -89,6 +90,55 @@ impl<T: Copy> Grid<T> {
             x: 0,
             y: 0,
         }
+    }
+
+    /// Gets a grid with distances from a start point.
+    pub fn breadth_first_search(
+        &self,
+        start: Point,
+        end: Option<Point>,
+        is_free: impl Fn(T) -> bool,
+    ) -> Grid<Option<u32>> {
+        let mut distances: Grid<Option<u32>> = Grid::new(self.width, self.height, None);
+        if !self.in_bounds(start) {
+            return distances;
+        }
+
+        distances[start] = Some(0);
+        let mut queue = VecDeque::from([(start, 0)]);
+
+        while let Some((pos, steps)) = queue.pop_front() {
+            if Some(pos) == end {
+                break;
+            }
+
+            for delta in Point::CARDINAL {
+                let next = pos + delta;
+
+                // get() does the bounds check; after that, dist[next] is safe
+                if self.get(next).is_some_and(&is_free) && distances[next].is_none() {
+                    distances[next] = Some(steps + 1);
+                    queue.push_back((next, steps + 1));
+                }
+            }
+        }
+
+        distances
+    }
+
+    pub fn distances(&self, start: Point, is_free: impl Fn(T) -> bool) -> Grid<Option<u32>> {
+        self.breadth_first_search(start, None, is_free)
+    }
+
+    pub fn shortest_path(
+        &self,
+        start: Point,
+        end: Point,
+        is_free: impl Fn(T) -> bool,
+    ) -> Option<u32> {
+        self.breadth_first_search(start, Some(end), is_free)
+            .get(end)
+            .flatten()
     }
 }
 
@@ -347,5 +397,28 @@ mod tests {
         assert_eq!(grid.iter().map(|(_, v)| v).sum::<u32>(), 5);
         assert_eq!(grid.find(5), Some(Point::new(1, 0)));
         assert_eq!(grid.to_string(), "05\n00");
+    }
+
+    #[test]
+    fn test_shortest_path_detour() {
+        let grid: Grid = ".#...\n.#.#.\n...#.".parse().unwrap();
+        let path = grid.shortest_path(Point::new(0, 0), Point::new(4, 0), |c| c != '#');
+        assert_eq!(path, Some(8));
+    }
+
+    #[test]
+    fn test_shortest_path_blocked() {
+        let grid: Grid = "..#\n.##\n#..".parse().unwrap();
+        let path = grid.shortest_path(Point::new(0, 0), Point::new(2, 2), |c| c != '#');
+        assert_eq!(path, None);
+    }
+
+    #[test]
+    fn test_shortest_path_start_is_end() {
+        let grid = sample();
+        assert_eq!(
+            grid.shortest_path(Point::new(1, 1), Point::new(1, 1), |_| true),
+            Some(0)
+        );
     }
 }
