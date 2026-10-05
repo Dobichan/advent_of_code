@@ -1,4 +1,7 @@
-use std::{collections::HashMap, fmt::Display};
+use std::{
+    collections::{HashMap, HashSet},
+    fmt::Display,
+};
 
 use crate::{AoCSolution, parsing::input_lines};
 
@@ -41,7 +44,8 @@ fn can_create<'a>(
 
 fn count_ways<'a>(
     pattern: &'a str,
-    towels: &Vec<String>,
+    towels: &HashSet<&str>,
+    max_len: usize,
     cache: &mut HashMap<&'a str, usize>,
 ) -> usize {
     if pattern.is_empty() {
@@ -53,9 +57,12 @@ fn count_ways<'a>(
     }
 
     let mut total = 0;
-    for towel in towels {
-        if let Some(remaining_pattern) = pattern.strip_prefix(towel.as_str()) {
-            total += count_ways(remaining_pattern, towels, cache);
+
+    // Check start of pattern up to max len
+    for len in 1..=max_len.min(pattern.len()) {
+        // if there are any towel of length 'len' that matches pattern start, add it and continue.
+        if towels.contains(&pattern[..len]) {
+            total += count_ways(&pattern[len..], towels, max_len, cache);
         }
     }
 
@@ -96,10 +103,14 @@ impl AoCSolution for Solution {
 
     fn part2(&self, data: &Self::Parsed) -> impl Display {
         let mut cache = HashMap::new();
+        // Make all towels into a HashSet for easy access.
+        let towels: HashSet<&str> = data.towels.iter().map(|t| t.as_str()).collect();
+        // Longest towel pattern
+        let max_len = data.towels.iter().map(|t| t.len()).max().unwrap_or(0);
 
         data.patterns
             .iter()
-            .map(|p| count_ways(p, &data.towels, &mut cache))
+            .map(|p| count_ways(p, &towels, max_len, &mut cache))
             .sum::<usize>()
     }
 }
